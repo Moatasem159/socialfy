@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "820119671186",
+    "project_id": "social-media-e9048",
+    "storage_bucket": "social-media-e9048.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:820119671186:android:2c5a480f1bc462e37e714b",
+        "android_client_info": {
+          "package_name": "com.example.socialfy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "820119671186-eq5c87m36otf1vifrvtep3etboc25ddh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.socialfy",
+            "certificate_hash": "5d73773cd7bfbffc48473bb71b2bc3e9369d92ad"
+          }
+        },
+        {
+          "client_id": "820119671186-b1uertoknjt8qjuo6va3qj8m114ce07h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDE17UEivStUTPW-pBNge2LSk6DkSrvByU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "820119671186-b1uertoknjt8qjuo6va3qj8m114ce07h.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "820119671186-e62ntac42d1ob0vec5v29cktmpg1mc1j.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mo3media.mo3media"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:820119671186:android:01ca447ed570e69e7e714b",
+        "android_client_info": {
+          "package_name": "com.mo3media.mo3media"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "820119671186-u0o14n7m3974a5qg78lvnkcirvocf8bs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mo3media.mo3media",
+            "certificate_hash": "5d73773cd7bfbffc48473bb71b2bc3e9369d92ad"
+          }
+        },
+        {
+          "client_id": "820119671186-b1uertoknjt8qjuo6va3qj8m114ce07h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDE17UEivStUTPW-pBNge2LSk6DkSrvByU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "820119671186-b1uertoknjt8qjuo6va3qj8m114ce07h.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "820119671186-e62ntac42d1ob0vec5v29cktmpg1mc1j.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mo3media.mo3media"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
