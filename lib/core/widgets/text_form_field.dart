@@ -6,6 +6,7 @@ class MainTextFormField extends StatelessWidget {
   final TextInputType? inputType;
   final String? hintText;
   final bool obscure;
+  final ValueChanged<String> ?onChange;
   final Widget? suffixIcon;
   final Widget? prefixIcon;
   const MainTextFormField({
@@ -16,13 +17,15 @@ class MainTextFormField extends StatelessWidget {
     this.obscure=false,
     this.suffixIcon,
     this.hintText,
-    this.prefixIcon}) : super(key: key);
+    this.prefixIcon,
+    this.onChange}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width-50,
       child: TextFormField(
+        onChanged: onChange,
         style: TextStyle(
           color: Theme.of(context).primaryColor
         ),

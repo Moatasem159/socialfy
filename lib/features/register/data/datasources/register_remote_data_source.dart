@@ -4,7 +4,6 @@ import 'package:socialfy/core/firebase/end_points.dart';
 import 'package:socialfy/core/firebase/firebase_consumer.dart';
 import 'package:socialfy/core/utils/strings_manager.dart';
 import 'package:socialfy/features/profile/data/models/user_model.dart';
-
 abstract class RegisterRemoteDataSource {
   Future<dynamic> register(
       {required String email,
@@ -12,19 +11,16 @@ abstract class RegisterRemoteDataSource {
       required String name,
       required String phone});
 }
-
 class RegisterRemoteDataSourceImpl implements RegisterRemoteDataSource {
-  FireBaseConsumer fireBaseConsumer;
-
-  RegisterRemoteDataSourceImpl({required this.fireBaseConsumer});
-
+  final FireBaseConsumer _fireBaseConsumer;
+  RegisterRemoteDataSourceImpl(this._fireBaseConsumer);
   @override
   Future<dynamic> register(
       {required String email,
       required String password,
       required String name,
       required String phone}) async {
-    UserCredential userCredential= await fireBaseConsumer.createUserWithEmailAndPassword(email: email, password: password);
+    UserCredential userCredential= await _fireBaseConsumer.createUserWithEmailAndPassword(email: email, password: password);
     if(userCredential.user!=null)
       {
         userData(
@@ -34,11 +30,8 @@ class RegisterRemoteDataSourceImpl implements RegisterRemoteDataSource {
             uId: userCredential.user!.uid,
             phone: phone);
       }
-
     return userCredential;
-
   }
-
   Future<void> userData(
       {required String collectionName,
       required String email,
@@ -53,7 +46,7 @@ class RegisterRemoteDataSourceImpl implements RegisterRemoteDataSource {
         token: AppStrings.userToken,
         bio: '',
         profilePic: '');
-     await fireBaseConsumer.set(
+     await _fireBaseConsumer.set(
         collectionName: collectionName, docName: uId, body: model.toJson());
   }
 }
