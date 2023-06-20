@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:socialfy/core/extensions/empty_padding_extension.dart';
 import 'package:socialfy/core/utils/assets_manager.dart';
 import 'package:socialfy/core/utils/values_manager.dart';
-import 'package:socialfy/features/register/presentation/widgets/register_form.dart';
+import 'package:socialfy/features/register/presentation/widgets/register_form_widgets/register_form.dart';
 class RegisterScreenBody extends StatelessWidget {
   const RegisterScreenBody({super.key});
   @override

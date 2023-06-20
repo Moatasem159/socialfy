@@ -2,7 +2,10 @@ import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:socialfy/config/routes/routes_manager.dart';
 import 'package:socialfy/core/error/failures.dart';
+import 'package:socialfy/core/utils/strings_manager.dart';
+import 'package:socialfy/core/widgets/toast/custom_toast.dart';
 import 'package:socialfy/features/register/domain/usecases/register_use_case.dart';
 import 'package:socialfy/features/register/presentation/cubit/register_state.dart';
 class RegisterCubit extends Cubit<RegisterStates> {
@@ -66,6 +69,20 @@ class RegisterCubit extends Cubit<RegisterStates> {
       response.fold(
             (failure) => emit(UserRegisterErrorState(msg: failure.message!)),
             (done) =>emit(UserRegisterSuccessState(registerDataModel: done)));
+    }
+  }
+  void listen(context,state){
+    if (state is UserRegisterSuccessState) {
+      CustomToast.showToast(context, msg: AppStrings.registerSuccessfullyMsg);
+      Navigator.pushNamed(context, Routes.loginScreenRoute);
+    }
+    if (state is UserRegisterErrorState) {
+      if(state.msg=="com.google.firebase.FirebaseException: An internal error has occurred. [ connection closed ]") {
+        CustomToast.showToast(context, msg: "No internet connection");
+      }
+      else {
+        CustomToast.showToast(context, msg: state.msg);
+      }
     }
   }
 }
