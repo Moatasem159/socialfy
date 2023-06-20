@@ -7,7 +7,7 @@
    <application
         android:label="socialfy"
         android:name="${applicationName}"
-        android:icon="@mipmap/socialfy_ic"
+        android:icon="@mipmap/ic_launcher"
         android:enabled="true"
         android:exported="true"
         android:requestLegacyExternalStorage="true"
