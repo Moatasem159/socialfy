@@ -1,30 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:socialfy/core/utils/colors_manager.dart';
 import 'package:socialfy/core/utils/font_manager.dart';
 import 'package:socialfy/core/utils/values_manager.dart';
-
 class AppTheme{
-  const AppTheme._();
-
   static final lightTheme=ThemeData(
     fontFamily: FontConstants.fontFamily,
-    primaryColorLight: AppColors.primaryLightColor,
-    backgroundColor: AppColors.backGroundLightThemeColor,
+    primaryColorLight: Colors.white,
+    colorScheme: const ColorScheme.light().copyWith(background: AppColors.backGroundLightThemeColor),
     primaryColor: AppColors.primaryLightThemeColor,
-    appBarTheme: const AppBarTheme(
-      iconTheme: IconThemeData(color: Colors.black),
-      toolbarTextStyle:TextStyle(
-        color: Colors.black
+    appBarTheme: AppBarTheme(
+      iconTheme: const IconThemeData(color: Colors.black),
+      toolbarTextStyle:const TextStyle(
+        color: Colors.black,
+        fontFamily: FontConstants.billaBong,
+        fontSize: 35
       ),
-
-      actionsIconTheme:  IconThemeData(
+      actionsIconTheme:  const IconThemeData(
         color: Colors.black,
         size: 33,
       ),
       titleSpacing: 10,
-      titleTextStyle: TextStyle(
+      titleTextStyle: const TextStyle(
           color: Colors.black,
         fontSize: AppSize.s35,
         fontFamily: FontConstants.fontFamily,
@@ -32,21 +29,7 @@ class AppTheme{
       ),
       backgroundColor:  Colors.transparent,
       elevation: 0,
-      systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: Colors.white,
-          statusBarIconBrightness: Brightness.dark
-      ),
-    ),
-    textTheme: const TextTheme(
-      button: TextStyle(
-          color: Colors.white
-      ),
-        labelMedium: TextStyle(
-            color: Colors.black
-        ),
-      bodyText1:TextStyle(
-          color: Colors.black
-      ),
+      systemOverlayStyle: setStatusBarAndNavigationBarColors(false),
     ),
     elevatedButtonTheme:ElevatedButtonThemeData(
       style: ButtonStyle(
@@ -58,19 +41,14 @@ class AppTheme{
       )
     ),
     inputDecorationTheme: InputDecorationTheme(
-    hintStyle: const TextStyle(
-      color: Colors.grey
-    ),
-    contentPadding: const EdgeInsets.symmetric(
-          horizontal: 3, vertical: 0),
+    hintStyle: const TextStyle(color: Colors.grey),
+    contentPadding: const EdgeInsets.symmetric(horizontal: 3, vertical: 0),
     suffixIconColor:AppColors.primaryLightThemeColor,
     prefixIconColor: AppColors.primaryLightThemeColor,
     focusedBorder: UnderlineInputBorder(
       borderSide: BorderSide(
         width: 1,
-        color:AppColors.primaryLightThemeColor,
-      )
-    ),
+        color:AppColors.primaryLightThemeColor)),
     enabledBorder: UnderlineInputBorder(
         borderSide: BorderSide(
           width: 1,
@@ -83,40 +61,34 @@ class AppTheme{
           color:Colors.red
         )
     ),
-
-
-
-
     ),
     bottomNavigationBarTheme:  BottomNavigationBarThemeData(
       elevation: 0,
       showUnselectedLabels: false,
       showSelectedLabels: false,
       backgroundColor: AppColors.backGroundLightThemeColor,
-      // unselectedItemColor: Colors.black.withOpacity(.5),
       selectedItemColor: AppColors.primaryDarkColor,
-      selectedIconTheme: IconThemeData(
-        color: AppColors.primaryDarkColor,
-      ),
+      selectedIconTheme: IconThemeData(color: AppColors.primaryDarkColor),
       type: BottomNavigationBarType.fixed,
     ),
     iconTheme: const IconThemeData(
       color: Colors.black
 )
-
   );
-
-
   static final darkTheme=ThemeData(
-    backgroundColor: AppColors.backGroundDarkThemeColor,
+    colorScheme: const ColorScheme.dark().copyWith(
+      background: AppColors.backGroundDarkThemeColor,
+    ),
     primaryColor: AppColors.primaryDarkThemeColor,
     fontFamily: FontConstants.fontFamily,
-    primaryColorLight: AppColors.primaryDarkColor,
+    primaryColorLight: Colors.grey[900],
     appBarTheme:  AppBarTheme(
       backgroundColor:  AppColors.backGroundDarkThemeColor,
       iconTheme: const IconThemeData(color: Colors.white),
       toolbarTextStyle:const TextStyle(
-          color: Colors.white
+          color: Colors.white,
+          fontFamily: FontConstants.billaBong,
+          fontSize: 35
       ),
       titleSpacing: 10,
       actionsIconTheme: const IconThemeData(
@@ -130,22 +102,7 @@ class AppTheme{
         fontWeight: FontWeightManager.medium,
       ),
       elevation: 0,
-      systemOverlayStyle: const SystemUiOverlayStyle(
-          statusBarColor: Colors.black,
-          statusBarBrightness: Brightness.dark,
-          statusBarIconBrightness: Brightness.light
-      ),
-    ),
-    textTheme: const TextTheme(
-        button: TextStyle(
-            color: Colors.black
-        ),
-      labelMedium: TextStyle(
-        color: Colors.white
-      ),
-      bodyText1:TextStyle(
-          color: Colors.white
-      ),
+      systemOverlayStyle:setStatusBarAndNavigationBarColors(true),
     ),
     elevatedButtonTheme:ElevatedButtonThemeData(
           style: ButtonStyle(
@@ -186,7 +143,7 @@ class AppTheme{
           )
       ),
   ),
-    bottomNavigationBarTheme:  BottomNavigationBarThemeData(
+    bottomNavigationBarTheme:BottomNavigationBarThemeData(
         elevation: 0,
         showUnselectedLabels: false,
         showSelectedLabels: false,
@@ -201,10 +158,6 @@ class AppTheme{
 
 
   );
-
-  static Brightness get currentSystemBrightness =>
-      SchedulerBinding.instance.window.platformBrightness;
-
   static setStatusBarAndNavigationBarColors(bool dark) {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle(

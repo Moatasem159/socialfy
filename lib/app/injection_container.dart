@@ -1,18 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:socialfy/config/themes/cubit/theme_cubit.dart';
+import 'package:socialfy/features/settings/data/datasources/theme_local_datasource/theme_local_datasource.dart';
+import 'package:socialfy/features/settings/data/repositories/theme_repository_impl.dart';
+import 'package:socialfy/features/settings/domain/repositories/theme_repository.dart';
+import 'package:socialfy/features/settings/domain/usecases/change_theme_usecase.dart';
+import 'package:socialfy/features/settings/domain/usecases/get_theme_usecase.dart';
+import 'package:socialfy/features/settings/presentation/cubit/theme_cubit/theme_cubit.dart';
 import 'package:socialfy/core/firebase/firebase.dart';
 import 'package:socialfy/core/firebase/firebase_consumer.dart';
 import 'package:socialfy/core/network/network_info.dart';
-import 'package:socialfy/core/notifications/notification.dart';
-import 'package:socialfy/core/notifications/notifications_handler.dart';
 import 'package:socialfy/core/shared/shared_prefrences.dart';
 import 'package:socialfy/core/shared/shared_prefrences_consumer.dart';
 import 'package:socialfy/features/home/presentation/cubit/bottom_navigation_cubit.dart';
@@ -70,7 +72,7 @@ Future<void> init()async{
     getPostCommentUseCase: sl(),
   ));
   sl.registerFactory<ProfileCubit>(() => ProfileCubit(getProfileUseCase:  sl(),sharedPrefrencesConsumer: sl()));
-  sl.registerFactory<ThemeCubit>(() => ThemeCubit(sharedPrefrencesConsumer: sl()));
+  sl.registerFactory<ThemeCubit>(() => ThemeCubit(sl(),sl()));
 
   /// data Source
   sl.registerLazySingleton<PostRemoteDataSource>(
@@ -79,6 +81,8 @@ Future<void> init()async{
           () => PostLocalDataSourceImpl());
   sl.registerLazySingleton<ProfileRemoteDataSource>(
           () => ProfileRemoteDataSourceImpl(fireBaseConsumer: sl()));
+  sl.registerLazySingleton<ThemeLocalDataSource>(
+          () => ThemeLocalDataSourceImpl(sl()));
 
 
   /// Repositories
@@ -88,6 +92,8 @@ Future<void> init()async{
 
   sl.registerLazySingleton<ProfileRepository>(
           () => ProfileRepositoryImpl(networkInfo: sl(),profileRemoteDataSources: sl()));
+  sl.registerLazySingleton<ThemeRepository>(
+          () => ThemeRepositoryImpl(sl()));
 
 
   ///use case
@@ -116,6 +122,9 @@ Future<void> init()async{
           () => AddLikeToCommentUseCase(postRepository: sl()));
   sl.registerLazySingleton<DisLikeCommentUseCase>(
           () => DisLikeCommentUseCase(postRepository: sl()));
+  sl.registerLazySingleton<ChangeThemeUseCase>(() => ChangeThemeUseCase(sl()));
+  sl.registerLazySingleton<GetThemeUseCase>(() => GetThemeUseCase(sl()));
+
 
   //// core
   sl.registerLazySingleton<NetworkInfo>(
@@ -130,7 +139,7 @@ Future<void> init()async{
   final fireBaseFireStore=FirebaseFirestore.instance;
   final fireBaseFireAuth=FirebaseAuth.instance;
   final fireBaseStorage=FirebaseStorage.instance;
-  final fireBaseMessaging=FirebaseMessaging.instance;
+  // final fireBaseMessaging=FirebaseMessaging.instance;
 
   final sharedPreferences=await SharedPreferences.getInstance();
   sl.registerLazySingleton(() => sharedPreferences);
@@ -138,21 +147,23 @@ Future<void> init()async{
   sl.registerLazySingleton(() => fireBaseFireStore);
   sl.registerLazySingleton(() => fireBaseStorage);
   sl.registerLazySingleton(() => fireBaseFireAuth);
-  sl.registerLazySingleton(() => fireBaseMessaging);
+  // sl.registerLazySingleton(() => fireBaseMessaging);
   sl.registerLazySingleton(() => InternetConnectionChecker());
   sl.registerLazySingleton(() => FlutterLocalNotificationsPlugin());
-  sl.registerLazySingleton<FireBaseConsumer>(() => FireBaseManager(client: sl(), auth: sl(),storage: sl(),messaging: sl()));
-  sl.registerLazySingleton<SharedPrefrencesConsumer>(() => SharedPrefrencesManager(sharedPreferences: sl()));
-  sl.registerLazySingleton<NotificationsHandler>(() => Notifications(flutterLocalNotificationsPlugin: sl()));
+  sl.registerLazySingleton<FireBaseConsumer>(() => FireBaseManager(client: sl(), auth: sl(),storage: sl(),
+      // messaging: sl()
+  ));
+  sl.registerLazySingleton<SharedPrefrencesConsumer>(() => SharedPrefrencesManager(sl()));
+  // sl.registerLazySingleton<NotificationsHandler>(() => Notifications(flutterLocalNotificationsPlugin: sl()));
 
 }
 
 initRegisterModule() {
   if (!GetIt.I.isRegistered<RegisterUseCase>()) {
-    sl.registerFactory(() => RegisterCubit(registerUseCase: sl() ));
-    sl.registerLazySingleton<RegisterUseCase>(() => RegisterUseCase(registerRepository: sl()));
-    sl.registerLazySingleton<RegisterRepository>(() => RegisterRepositoryImpl(networkInfo: sl(),registerRemoteDataSource: sl()));
-    sl.registerLazySingleton<RegisterRemoteDataSource>(() => RegisterRemoteDataSourceImpl(fireBaseConsumer: sl()));
+    sl.registerFactory(() => RegisterCubit(sl()));
+    sl.registerLazySingleton<RegisterUseCase>(() => RegisterUseCase(sl()));
+    sl.registerLazySingleton<RegisterRepository>(() => RegisterRepositoryImpl(sl(),sl()));
+    sl.registerLazySingleton<RegisterRemoteDataSource>(() => RegisterRemoteDataSourceImpl(sl()));
 
   }
 
