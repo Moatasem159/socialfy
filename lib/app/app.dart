@@ -6,7 +6,6 @@ import 'package:socialfy/config/themes/app_theme.dart';
 import 'package:socialfy/features/settings/presentation/cubit/theme_cubit/theme_cubit.dart';
 import 'package:socialfy/features/post/presentation/cubit/post_cubit.dart';
 import 'package:socialfy/features/profile/presentation/cubit/profile_cubit.dart';
-import 'package:socialfy/features/profile/presentation/cubit/profile_state.dart';
 import 'package:socialfy/features/settings/presentation/cubit/theme_cubit/theme_state.dart';
 class Socialfy extends StatelessWidget {
   const Socialfy({Key? key}) : super(key: key);
@@ -18,18 +17,14 @@ class Socialfy extends StatelessWidget {
         BlocProvider(create: (context) => di.sl<ProfileCubit>()),
         BlocProvider(create: (context) => di.sl<ThemeCubit>()..getTheme())
       ],
-      child: BlocBuilder<ProfileCubit, ProfileStates>(
+      child: BlocBuilder<ThemeCubit, ThemeStates>(
         builder: (context, state) {
-          return BlocBuilder<ThemeCubit, ThemeStates>(
-            builder: (context, state) {
-              return MaterialApp(
-                onGenerateRoute: RouteGenerator.getRoute,
-                debugShowCheckedModeBanner: false,
-                themeMode: state.mood,
-                theme: AppTheme.lightTheme,
-                darkTheme: AppTheme.darkTheme,
-              );
-            },
+          return MaterialApp(
+            onGenerateRoute: RouteGenerator.getRoute,
+            debugShowCheckedModeBanner: false,
+            themeMode: state.mood,
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
           );
         },
       ),
