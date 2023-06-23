@@ -28,7 +28,8 @@ class RegisterButton extends StatelessWidget {
                         fontSize: FontSize.s16,
                         color: Theme.of(context).primaryColorLight)),
               ),
-            if (state is UserRegisterLoadingState) const LoadingWidget(),
+            if (state is UserRegisterLoadingState)
+              const LoadingWidget(size: 50),
           ],
         );
       },

@@ -2,27 +2,19 @@ import 'package:flutter/material.dart';
 
 class MainBackButton extends StatelessWidget {
   final  VoidCallback? onPressed;
-  final Color ?color;
-
-  const MainBackButton({Key? key,this.onPressed, this.color,}) : super(key: key);
-
+  const MainBackButton({Key? key,this.onPressed}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(onPressed: (){
-      Navigator.of(context).pop();
-
-    },
+    return ElevatedButton(onPressed: ()=>Navigator.of(context).pop(),
       style: ButtonStyle(
         minimumSize: MaterialStateProperty.all(const Size(34,34)),
         padding: MaterialStateProperty.all(EdgeInsets.zero),
-        backgroundColor: MaterialStateProperty.all(color)
+        backgroundColor: MaterialStateProperty.all(Theme.of(context).primaryColor)
       ),
-      child:  Icon(Icons.arrow_back_ios_rounded,size: 14,color: Theme.of(context).iconTheme.color,),
+      child:  Icon(Icons.arrow_back_ios_rounded,size: 14,color: Theme.of(context).primaryColorLight,),
     );
   }
 }
-
-
 
 
 class MainButton extends StatelessWidget {
@@ -30,18 +22,26 @@ class MainButton extends StatelessWidget {
   final Widget child;
   final double width;
   final double height;
-  const MainButton({Key? key, required this.onPressed, required this.child, required this.width, required this.height}) : super(key: key);
-
+  final double radius;
+  final Color color;
+  const MainButton({
+    Key? key,
+    required this.onPressed,
+    required this.child,
+    required this.width,
+    required this.height, this.radius=7,
+    required this.color}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
         onPressed:onPressed,
         style: ButtonStyle(
-            fixedSize: MaterialStateProperty.all(
-                Size(MediaQuery
-                    .of(context)
-                    .size
-                    .width - width, height))),
+          padding: MaterialStateProperty.all(EdgeInsets.zero),
+            backgroundColor: MaterialStateProperty.all(color),
+            shape: MaterialStateProperty.all(RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(radius)
+            )),
+            fixedSize: MaterialStateProperty.all(Size(width, height))),
         child: child);
   }
 }

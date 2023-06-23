@@ -1,99 +1,37 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:socialfy/config/routes/routes_manager.dart';
+import 'package:socialfy/app/injection_container.dart';
 import 'package:socialfy/core/utils/strings_manager.dart';
-import 'package:socialfy/core/widgets/loading_widget.dart';
-import 'package:socialfy/core/widgets/text_form_field.dart';
-import 'package:socialfy/features/post/presentation/cubit/post_cubit.dart';
-import 'package:socialfy/features/post/presentation/cubit/post_state.dart';
-
-class FinishingPostScreen extends StatefulWidget {
-  final dynamic imageFile;
-
-  const FinishingPostScreen({this.imageFile, Key? key}) : super(key: key);
-
-  @override
-  State<FinishingPostScreen> createState() => _FinishingPostScreenState();
-}
-
-class _FinishingPostScreenState extends State<FinishingPostScreen> {
+import 'package:socialfy/features/post/presentation/cubit/create_post_cubit/create_post_cubit.dart';
+import 'package:socialfy/features/post/presentation/widgets/create_post_appbar.dart';
+import 'package:socialfy/features/post/presentation/widgets/finish_post_screen_widgets/done_button.dart';
+import 'package:socialfy/features/post/presentation/widgets/finish_post_screen_widgets/finish_post_screen_body.dart';
+class FinishingPostScreen extends StatelessWidget {
+  final File imageFile;
+  final dynamic imageHeight;
+  final dynamic imageWidth;
+  const FinishingPostScreen({required this.imageFile, Key? key, this.imageHeight, this.imageWidth}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    PostCubit cubit = BlocProvider.of<PostCubit>(context);
-    return BlocConsumer<PostCubit, PostStates>(
-      listener: (context, state) {
-        if(state is CreatePostSuccessState)
-        {
-          Navigator.pushNamedAndRemoveUntil(context, Routes.mainScreenRoute, (route) => false);
-          cubit.captionController.clear();
-          cubit.files!.clear();
-          cubit.imageFile=null;
-          cubit.getNewFeed();
-        }
-      },
-      builder: (context, state) {
-        return GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          child: SafeArea(
-              child: Scaffold(
-                appBar: AppBar(
-                  leading: GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: const Icon(Icons.arrow_back_outlined)),
-                  title: const Text(AppStrings.newPost),
-                  titleTextStyle: Theme.of(context)
-                      .appBarTheme
-                      .titleTextStyle!
-                      .copyWith(fontSize: 20),
-                  actions: [
-                    GestureDetector(
-                      onTap: () {
-                        cubit.createPost(
-                            caption: cubit.captionController.text,
-                            image: widget.imageFile,
-                            context: context);
-                        FocusScope.of(context).unfocus();
-                      },
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Text(
-                            'done',
-                            style: Theme.of(context)
-                                .appBarTheme
-                                .titleTextStyle!
-                                .copyWith(color: Colors.blue, fontSize: 15),
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                body: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: SizedBox(
-                              width: 100,
-                              height: 100,
-                              child:
-                              Image(image: FileImage(File(widget.imageFile)))),
-                        ),
-                        NoneBorderTextFormField(controller: cubit.captionController, size: 150,hintText: AppStrings.writeCaption),
-                      ],
-                    ),
-                    if(state is CreatePostLoadingState)
-                      const LoadingWidget()
-                  ],
-                ),
-              )),
-        );
-      },
+    return BlocProvider(
+      create: (context) => sl<CreatePostCubit>(),
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: SafeArea(
+          child: Scaffold(
+            backgroundColor: Theme.of(context).colorScheme.background,
+            appBar:  CreatePostAppBar(
+              actions: [
+                DoneButton(imageFile: imageFile,imageHeight: imageHeight,imageWidth: imageWidth),
+              ],
+              title: AppStrings.newPost,
+              leading: Icons.arrow_back_outlined,
+            ),
+            body: FinishPostScreenBody(imageFile: imageFile,imageHeight: imageHeight,imageWidth: imageWidth),
+          ),
+        ),
+      ),
     );
   }
 }

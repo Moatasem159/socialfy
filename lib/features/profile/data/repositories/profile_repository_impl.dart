@@ -4,7 +4,7 @@ import 'package:socialfy/core/error/failures.dart';
 import 'package:socialfy/core/network/network_info.dart';
 import 'package:socialfy/core/utils/strings_manager.dart';
 import 'package:socialfy/features/profile/data/data_sources/profile_remote_data_source.dart';
-import 'package:socialfy/features/profile/data/models/user_model.dart';
+import 'package:socialfy/core/models/user_model.dart';
 import 'package:socialfy/features/profile/domain/repositories/profile_repository.dart';
 
 class ProfileRepositoryImpl implements ProfileRepository{

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:socialfy/core/firebase/end_points.dart';
 import 'package:socialfy/core/firebase/firebase_consumer.dart';
-import 'package:socialfy/features/profile/data/models/user_model.dart';
+import 'package:socialfy/core/models/user_model.dart';
 abstract class LoginRemoteDataSource {
   Future<dynamic> login({required String email, required String password});
 }
@@ -20,7 +20,7 @@ class LoginRemoteDataSourceImpl implements LoginRemoteDataSource {
   }
   Future<UserDataModel> getUserData(uid)async{
     DocumentSnapshot<Map<String, dynamic>> response= await _fireBaseConsumer.get(
-        collectionName: EndPoints.USERCOLLECTION,
+        collectionName: EndPoints.userCollection,
         docName: uid);
     return UserDataModel.fromJson(response.data()!);
   }

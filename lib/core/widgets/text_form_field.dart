@@ -56,7 +56,7 @@ class NoneBorderTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        width: MediaQuery.of(context).size.width - size,
+        width:size,
         child: TextFormField(
           controller: controller,
           cursorColor: Theme.of(context).primaryColor,

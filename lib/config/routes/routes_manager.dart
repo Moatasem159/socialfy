@@ -6,7 +6,6 @@ import 'package:socialfy/features/login/presentation/screens/login_screen.dart';
 import 'package:socialfy/features/register/presentation/screens/register_screen.dart';
 import 'package:socialfy/features/settings/presentation/screens/settings_screen.dart';
 import 'package:socialfy/features/settings/presentation/screens/theme_settings_screen.dart';
-import 'package:socialfy/features/splash/presentation/screens/splash_screen.dart';
 import 'package:socialfy/features/welcome/presentation/screens/welcome_screen.dart';
 
 
@@ -28,7 +27,14 @@ class RouteGenerator {
   static Route<dynamic> getRoute(RouteSettings settings) {
     switch (settings.name) {
       case Routes.splashRoute:
-        return MaterialPageRoute(builder: (_) => const SplashScreen());
+        if(AppStrings.userLoggedInId==null)
+        {
+          return MaterialPageRoute(builder: (_) =>  const WelcomeScreen());
+        }
+        else if(AppStrings.userLoggedInId!=null){
+          return MaterialPageRoute(builder: (_) =>  const MainScreen());
+        }
+        return unDefinedRoute();
       case Routes.welcomeScreenRoute:
         return MaterialPageRoute(builder: (_) =>  const WelcomeScreen());
       case Routes.registerScreenRoute:

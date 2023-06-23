@@ -1,24 +1,16 @@
 import 'dart:ui';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
-import 'package:socialfy/core/utils/font_manager.dart';
 import 'package:socialfy/core/utils/values_manager.dart';
 import 'package:socialfy/features/post/domain/entities/post.dart';
 import 'package:socialfy/features/post/presentation/cubit/post_cubit.dart';
 import 'package:socialfy/features/post/presentation/cubit/post_state.dart';
 import 'package:socialfy/features/post/presentation/screens/comment_screen.dart';
-import 'package:socialfy/features/profile/presentation/cubit/profile_cubit.dart';
-
-
 class PostDialog extends StatelessWidget {
   final Post post;
   const PostDialog({Key? key,required this.post}) : super(key: key);
-
-
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PostCubit, PostStates>(
@@ -59,10 +51,10 @@ class PostDialog extends StatelessWidget {
                   ),
                   Text(
                     post.username!,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(fontWeight: FontWeightManager.medium),
+                    // style: Theme.of(context)
+                    //     .textTheme
+                    //     .bodyText1!
+                    //     .copyWith(fontWeight: FontWeightManager.medium),
                   ),
                   const Spacer(),
                   GestureDetector(
@@ -87,24 +79,24 @@ class PostDialog extends StatelessWidget {
                   horizontal:10),
               child: Row(
                 children: [
-                  GestureDetector(
-                      onTap: () {
-                        BlocProvider.of<PostCubit>(context).like(
-                            postId: post.postId!,
-                            uid: BlocProvider.of<ProfileCubit>(context)
-                                .profile!
-                                .uId!,
-                            name: BlocProvider.of<ProfileCubit>(context)
-                                .profile!
-                                .name!,
-                            profilePic: BlocProvider.of<ProfileCubit>(context)
-                                .profile!
-                                .profilePic!);
-                      },
-                      child: post.isLike
-                          ? const Icon(LineAwesomeIcons.heart_1,
-                          size: AppSize.s30, color: Colors.red)
-                          : const Icon(LineAwesomeIcons.heart, size: AppSize.s30)),
+                  // GestureDetector(
+                  //     onTap: () {
+                  //       // BlocProvider.of<PostCubit>(context).like(
+                  //       //     postId: post.postId!,
+                  //       //     uid: BlocProvider.of<ProfileCubit>(context)
+                  //       //         .profile!
+                  //       //         .uId!,
+                  //       //     name: BlocProvider.of<ProfileCubit>(context)
+                  //       //         .profile!
+                  //       //         .name!,
+                  //       //     profilePic: BlocProvider.of<ProfileCubit>(context)
+                  //       //         .profile!
+                  //       //         .profilePic!);
+                  //     },
+                  //     child: post.isLike
+                  //         ? const Icon(LineAwesomeIcons.heart_1,
+                  //         size: AppSize.s30, color: Colors.red)
+                  //         : const Icon(LineAwesomeIcons.heart, size: AppSize.s30)),
                   const SizedBox(
                     width: 17,
                   ),

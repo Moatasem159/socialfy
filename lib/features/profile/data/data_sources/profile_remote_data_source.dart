@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:socialfy/core/firebase/end_points.dart';
 import 'package:socialfy/core/firebase/firebase_consumer.dart';
 import 'package:socialfy/core/utils/strings_manager.dart';
-import 'package:socialfy/features/profile/data/models/user_model.dart';
+import 'package:socialfy/core/models/user_model.dart';
 
 abstract class ProfileRemoteDataSource {
 
@@ -21,10 +21,9 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource{
 
   @override
   Future<UserDataModel> getProfile() async{
-    DocumentSnapshot<Map<String, dynamic>> response= await fireBaseConsumer.get(collectionName: EndPoints.USERCOLLECTION, docName: AppStrings.userLoggedInId!);
+    DocumentSnapshot<Map<String, dynamic>> response= await fireBaseConsumer.get(
+        collectionName: EndPoints.userCollection,
+        docName: AppStrings.userLoggedInId!);
      return UserDataModel.fromJson(response.data()!);
   }
-
-
-
 }

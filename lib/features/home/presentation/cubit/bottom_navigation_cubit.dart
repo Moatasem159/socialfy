@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import 'package:socialfy/core/utils/strings_manager.dart';
 import 'package:socialfy/features/home/presentation/cubit/bottom_navigation_state.dart';
 import 'package:socialfy/features/messenger/presentation/screens/messenger_screen.dart';
 import 'package:socialfy/features/notifications/presentation/screens/notifications_screen.dart';
@@ -8,41 +10,56 @@ import 'package:socialfy/features/post/presentation/screens/create_post_screen.d
 import 'package:socialfy/features/post/presentation/screens/news_feed_screen.dart';
 import 'package:socialfy/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:socialfy/features/profile/presentation/screens/profile_screen.dart';
-
 class BottomNavigationCubit extends Cubit<BottomNavigationStates> {
   BottomNavigationCubit() : super(BottomNavigationInitialState());
-
   List<BottomNavigationBarItem> getNavigationItems(BuildContext context) {
     return [
       const BottomNavigationBarItem(
           icon: Icon(Icons.home_outlined), label: ""),
       const BottomNavigationBarItem(
-          icon: Icon(Icons.notifications_none_outlined),
-          label: "notifications"),
+          icon: Icon(Icons.search),
+          label: ""),
       const BottomNavigationBarItem(
           icon: Icon(Icons.add_box_outlined), label: ""),
       const BottomNavigationBarItem(
-          icon: Icon(Icons.message_outlined), label: ""),
+          icon: Icon(LineAwesomeIcons.facebook_messenger, size: 27), label: ""),
       BottomNavigationBarItem(
-          icon: BlocProvider.of<ProfileCubit>(context).profile == null
-              ? const CircleAvatar(
-                  radius: 12,
-                  backgroundColor: Colors.grey,
-                )
-              : CircleAvatar(
-                  radius: 15,
-                  backgroundColor: Colors.grey,
-                  child: CircleAvatar(
-                      backgroundColor: Colors.grey,
-                      radius: 14,
-                      backgroundImage: CachedNetworkImageProvider(
-                        "${BlocProvider.of<ProfileCubit>(context).profile!.profilePic}",
-                      )),
+          icon: CachedNetworkImage(
+            imageUrl: AppStrings.profilePic!,
+            height: 30,
+            fadeOutDuration: Duration.zero,
+            fadeInDuration: Duration.zero,
+            width: 40,
+            errorWidget: (context, url, error) =>
+                CircleAvatar(
+                  radius: 17,
+                  backgroundColor: Colors.grey[800],
                 ),
+            imageBuilder: (context, imageProvider) {
+              return Container(
+                decoration: BoxDecoration(
+                    color: Theme
+                        .of(context)
+                        .primaryColor,
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                        image: imageProvider
+                    )
+                ),
+              );
+            },
+            placeholder: (
+                    (context, url) {
+                  return CircleAvatar(
+                    radius: 17,
+                    backgroundColor: Colors.grey[800],
+                  );
+                }
+            ),
+          ),
           label: ""),
     ];
   }
-
   int bottomNavIndex = 0;
   List<Widget> screens = [
     const NewsFeedScreen(),
@@ -52,14 +69,25 @@ class BottomNavigationCubit extends Cubit<BottomNavigationStates> {
     const ProfileScreen(),
   ];
 
+  ScrollController homeController=ScrollController();
   void changeIndex(int index, BuildContext context) {
     emit(ChangeBottomNavLoadingState());
+    // if(index==0) {
+    //   homeController.animateTo(
+    //       0,
+    //       duration:const Duration(milliseconds: 100),
+    //       curve: Curves.easeIn);
+    //   bottomNavIndex = index;
+    // }
     if (index == 2) {
       Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => const CreatePostScreen(),
       ));
     }
     else if (index==4){
+      if(BlocProvider.of<ProfileCubit>(context).profile==null){
+        BlocProvider.of<ProfileCubit>(context).getProfile();
+      }
       BlocProvider.of<ProfileCubit>(context).getUserPost(context: context);
       bottomNavIndex = index;
     }

@@ -12,13 +12,13 @@ class LoginButton extends StatelessWidget {
   const LoginButton({super.key});
   @override
   Widget build(BuildContext context) {
-    LoginCubit cubit = LoginCubit.get(context);
     return BlocBuilder<LoginCubit, LoginStates>(
       builder: (context, state) {
+        LoginCubit cubit = LoginCubit.get(context);
         return Column(
           children: [
             15.ph,
-            if (state is! LoginLoadingState)
+            if (state is !LoginLoadingState)
               MainButton(
                   onPressed:()=> cubit.login(context),
                   width: context.getWidth(w: 1.2),
@@ -29,7 +29,7 @@ class LoginButton extends StatelessWidget {
                           fontSize: FontSize.s16,
                           color: Theme.of(context).primaryColorLight))),
             if (state is LoginLoadingState)
-              const LoadingWidget(),
+              const LoadingWidget(size: 50),
           ],
         );
       },

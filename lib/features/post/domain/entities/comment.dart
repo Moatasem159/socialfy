@@ -1,19 +1,15 @@
-import 'package:socialfy/features/post/data/models/like_model.dart';
-
 class Comment {
   String? uId;
-  String? commentID;
+  String? commentId;
   String? comment;
   String? profilePic;
   String? name;
   String? dateTime;
-  String? time;
-  bool isLike = false;
-  List<LikeModel>? likes;
-
+  List<String>? likes;
+  bool isLike=false;
   Comment(
       {this.uId,
-      this.commentID,
+      this.commentId,
       this.comment,
       this.profilePic,
       this.name,

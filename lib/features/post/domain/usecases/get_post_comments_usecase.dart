@@ -1,11 +1,9 @@
-import 'package:dartz/dartz.dart';
-import 'package:socialfy/core/error/failures.dart';
-import 'package:socialfy/features/post/domain/repositories/post_repository.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:socialfy/features/post/domain/repositories/comment_repository.dart';
 class GetPostCommentUseCase{
-  PostRepository postRepository;
-  GetPostCommentUseCase({required this.postRepository});
-  Future<Either<Failure,dynamic>>call({required String postId}){
-    return postRepository.getPostComments(postId: postId);
+  final CommentRepository _commentRepository;
+  GetPostCommentUseCase(this._commentRepository);
+  Stream<QuerySnapshot<Object>>call({required String postId}){
+    return _commentRepository.getComments(postId: postId);
   }
 }

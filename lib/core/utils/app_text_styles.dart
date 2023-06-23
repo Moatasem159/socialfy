@@ -7,11 +7,12 @@ abstract class AppTextStyles{
     return TextStyle(
       color:color,
       fontSize: fontSize,
+      fontWeight: FontWeightManager.normal,
       fontFamily: FontConstants.fontFamily,
 
     );
   }
-  static TextStyle getBoldText({
+  static  TextStyle getBoldText({
     required double fontSize,
     FontWeight weight=FontWeightManager.bold,
     required Color color}){

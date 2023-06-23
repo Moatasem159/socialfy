@@ -2,27 +2,23 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:socialfy/core/firebase/firebase_consumer.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class FireBaseManager extends FireBaseConsumer {
-  final FirebaseFirestore client;
-  final FirebaseAuth auth;
-  final FirebaseStorage storage;
-  final FirebaseMessaging messaging;
+  final FirebaseFirestore _client;
+  final FirebaseAuth _auth;
+  final FirebaseStorage _storage;
+  // final FirebaseMessaging messaging;
 
-  FireBaseManager(
-      {required this.storage,
-        required this.messaging,
-        required this.auth,
-        required this.client});
+  FireBaseManager(this._auth,this._client,this._storage);
 
 
 
   @override
   Future get({required String collectionName, required String docName}) async {
-    final response = await client.collection(collectionName).doc(docName).get();
+    final response = await _client.collection(collectionName).doc(docName).get();
     return response;
   }
 
@@ -30,18 +26,17 @@ class FireBaseManager extends FireBaseConsumer {
   Future delete(
       {required String collectionName, required String docName}) async {
     final response =
-        await client.collection(collectionName).doc(docName).delete();
+        await _client.collection(collectionName).doc(docName).delete();
     return response;
   }
 
-  @override
-  Future<dynamic> listen({required String collectionName}) async {}
+
 
   @override
   Future add(
       {required String collectionName,
       required Map<String, dynamic> body}) async {
-    final response = await client.collection(collectionName).add(body);
+    final response = await _client.collection(collectionName).add(body);
     return response;
   }
 
@@ -51,27 +46,27 @@ class FireBaseManager extends FireBaseConsumer {
       required String docName,
       required Map<String, dynamic> body}) async {
     final response =
-        await client.collection(collectionName).doc(docName).set(body);
+        await _client.collection(collectionName).doc(docName).set(body);
     return response;
   }
 
   @override
   Future<UserCredential> signInWithEmailAndPassword(
       {required String email, required String password}) async {
-    return await auth.signInWithEmailAndPassword(
+    return await _auth.signInWithEmailAndPassword(
         email: email, password: password);
   }
 
   @override
   Future createUserWithEmailAndPassword(
       {required String email, required String password}) async {
-    return await auth.createUserWithEmailAndPassword(
+    return await _auth.createUserWithEmailAndPassword(
         email: email, password: password);
   }
 
   @override
   Future uploadImage({required String link, required File image}) {
-    return storage.ref().child(link).putFile(image);
+    return _storage.ref().child(link).putFile(image);
   }
 
   @override
@@ -81,7 +76,7 @@ class FireBaseManager extends FireBaseConsumer {
       required String collectionName2,
       required String docName2,
       required Map<String, dynamic> body}) async {
-    return await client
+    return await _client
         .collection(collectionName1)
         .doc(docName1)
         .collection(collectionName2)
@@ -94,16 +89,12 @@ class FireBaseManager extends FireBaseConsumer {
       {required String collectionName,
       required String docName,
       required Map<String, dynamic> body}) async {
-    return client.collection(collectionName).doc(docName).update(body);
+    return _client.collection(collectionName).doc(docName).update(body);
   }
 
   @override
-  Future<QuerySnapshot> getCollections(
-      {required String collectionName, required String order}) async {
-    return client
-        .collection(collectionName)
-        .orderBy(order, descending: true)
-        .get();
+  Future<QuerySnapshot> getCollections({required String collectionName}) async {
+    return _client.collection(collectionName).get();
   }
 
   @override
@@ -112,7 +103,7 @@ class FireBaseManager extends FireBaseConsumer {
       required String docName1,
       required String collectionName2,
       required String order}) async {
-    return await client
+    return await _client
         .collection(collectionName1)
         .doc(docName1)
         .collection(collectionName2)
@@ -126,7 +117,7 @@ class FireBaseManager extends FireBaseConsumer {
       required String docName1,
       required String collectionName2,
       required String docName2}) async {
-    return await client
+    return await _client
         .collection(collectionName1)
         .doc(docName1)
         .collection(collectionName2)
@@ -143,7 +134,7 @@ class FireBaseManager extends FireBaseConsumer {
       required String collectionName3,
       required String docName3,
       required Map<String, dynamic> body}) async {
-    return await client
+    return await _client
         .collection(collectionName1)
         .doc(docName1)
         .collection(collectionName2)
@@ -161,7 +152,7 @@ class FireBaseManager extends FireBaseConsumer {
       required String docName2,
       required String collectionName3,
       required String docName3}) async {
-    return await client
+    return await _client
         .collection(collectionName1)
         .doc(docName1)
         .collection(collectionName2)
@@ -177,7 +168,7 @@ class FireBaseManager extends FireBaseConsumer {
       required String collectionName2,
       required String docName,
       required Map<String, dynamic> body}) async {
-    return await client
+    return await _client
         .collection(collectionName1)
         .doc(docName)
         .collection(collectionName2)
@@ -191,7 +182,7 @@ class FireBaseManager extends FireBaseConsumer {
       required String collectionName2,
       required String docName2,
       required Map<String, dynamic> body}) async {
-    return await client
+    return await _client
         .collection(collectionName1)
         .doc(docName1)
         .collection(collectionName2)
@@ -201,13 +192,13 @@ class FireBaseManager extends FireBaseConsumer {
 
   @override
   Future deleteImage({required String link}) async {
-    return storage.refFromURL(link).delete();
+    return _storage.refFromURL(link).delete();
   }
 
   @override
   Future deleteDoc(
       {required String collectionName, required String docName}) async {
-    return client.runTransaction((transaction) async {
+    return _client.runTransaction((transaction) async {
       DocumentReference;
       // transaction.delete(docName)
     });
@@ -221,7 +212,7 @@ class FireBaseManager extends FireBaseConsumer {
       required String docName2,
       required String collectionName3,
       required String order}) async {
-    return await client
+    return await _client
         .collection(collectionName1)
         .doc(docName1)
         .collection(collectionName2)
@@ -229,5 +220,18 @@ class FireBaseManager extends FireBaseConsumer {
         .collection(collectionName3)
         .orderBy(order)
         .get();
+  }
+  @override
+  Stream<QuerySnapshot<Object>> streamListen({required String collectionName}) {
+    return _client.collection(collectionName)
+        .orderBy('dateTime', descending: true)
+        .snapshots();
+  }
+
+  @override
+  Stream<QuerySnapshot<Object>> streamListenDeep1(
+  {required String collectionName, required String docName, required, required String collectionName2}) {
+   return _client.collection(collectionName)
+       .doc(docName).collection(collectionName2).orderBy('dateTime', descending: true).snapshots();
   }
 }

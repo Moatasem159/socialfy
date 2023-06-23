@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:socialfy/core/firebase/end_points.dart';
 import 'package:socialfy/core/firebase/firebase_consumer.dart';
 import 'package:socialfy/core/utils/strings_manager.dart';
-import 'package:socialfy/features/profile/data/models/user_model.dart';
+import 'package:socialfy/core/models/user_model.dart';
 abstract class RegisterRemoteDataSource {
   Future<dynamic> register(
       {required String email,
@@ -24,7 +24,7 @@ class RegisterRemoteDataSourceImpl implements RegisterRemoteDataSource {
     if(userCredential.user!=null)
       {
         userData(
-            collectionName: EndPoints.USERCOLLECTION,
+            collectionName: EndPoints.userCollection,
             email: email,
             name: name,
             uId: userCredential.user!.uid,

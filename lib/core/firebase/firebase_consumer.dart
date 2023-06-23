@@ -1,18 +1,12 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 abstract class FireBaseConsumer {
-  Future<dynamic> get(
-      {required String collectionName, required String docName});
-
-  Future<QuerySnapshot> getCollections(
-      {required String collectionName, required String order});
-
-  dynamic listen({required String collectionName});
-
-  Future<dynamic> add(
-      {required String collectionName, required Map<String, dynamic> body});
+  Future<dynamic> get({required String collectionName, required String docName});
+  Future<QuerySnapshot> getCollections({required String collectionName});
+  Stream<QuerySnapshot<Object>> streamListen({required String collectionName});
+  Stream<QuerySnapshot<Object>> streamListenDeep1({required String collectionName,
+  required String docName,required,required String collectionName2});
+  Future<dynamic> add({required String collectionName, required Map<String, dynamic> body});
 
   Future<dynamic> addDeep1(
       {required String collectionName1,

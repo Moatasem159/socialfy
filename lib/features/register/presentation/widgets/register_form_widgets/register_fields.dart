@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:socialfy/core/extensions/empty_padding_extension.dart';
 import 'package:socialfy/core/utils/strings_manager.dart';
 import 'package:socialfy/core/widgets/text_form_field.dart';
-import 'package:socialfy/features/register/presentation/cubit/custom_validation.dart';
+import 'package:socialfy/core/utils/custom_validation.dart';
 import 'package:socialfy/features/register/presentation/cubit/register_cubit.dart';
 import 'package:socialfy/features/register/presentation/cubit/register_state.dart';
 class RegisterFields extends StatelessWidget {

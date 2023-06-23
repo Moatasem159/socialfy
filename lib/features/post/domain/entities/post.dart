@@ -1,19 +1,16 @@
-import 'package:socialfy/features/post/data/models/like_model.dart';
-
 class Post {
   String? username;
   String? uId;
   String? postId;
   String? profilePic;
+  dynamic postImageHeight;
+  dynamic postImageWidth;
   String? dateTime;
   String? postText;
   String? postImage;
-  // int? postCount;
-  bool isLike = false;
-  List<LikeModel>? likes;
+  List<String> ?likes;
   int? commentsCount;
-  // final List<CommentModel>? comments;
-  String? time;
+  bool isLiked=false;
   Post(
       {this.username,
       this.uId,
@@ -24,5 +21,7 @@ class Post {
       this.postId,
       this.likes,
       this.commentsCount,
+      this.postImageHeight,
+      this.postImageWidth,
       });
 }

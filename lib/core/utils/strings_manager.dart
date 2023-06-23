@@ -12,6 +12,8 @@ static const String newPost="New post";
 static const String comments="Comments";
 static const String noCommentsYet="No comments yet";
 static const String beTheFirstToComment="Be the first to comment";
+static const String beTheFirstToPost="Be the first to post";
+static const String emptyPosts="it's a little quiet now";
 static const String writeCaption="Write caption...";
 static const String addComment="Add a comment";
 static const String add="Add";
@@ -19,6 +21,7 @@ static const String createAccount="Create Account";
 
 
 static const String nameHint="Name";
+static const String peopleWhoLiked="People who Liked";
 
 static const String nameRequired="Name is required";
 static const String nameNotValid="Name is not valid";

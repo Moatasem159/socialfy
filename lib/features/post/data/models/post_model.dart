@@ -1,54 +1,30 @@
 import 'package:socialfy/features/post/domain/entities/post.dart';
-
 class PostModel extends Post{
-  PostModel({required super.username,
-    required super.postId,
-    required super.uId,
-    required super.profilePic,
-    required super.dateTime,
-    required super.postText,
-    required super.postImage,
+  PostModel({
+    super.username,
+     super.postId,
+     super.uId,
+     super.profilePic,
+     super.dateTime,
+     super.postText,
+     super.postImage,
     super.likes,
     super.commentsCount,
+    super.postImageHeight,
+    super.postImageWidth
   });
-  PostModel.fromJson(Map<String,dynamic >json){
-    dateTime=json['dateTime']??'';
-    username=json['name']??'';
-    postText=json['postText']??'';
-    uId=json['uId']??'';
-    postId=json['postId']??'';
-    postImage=json['postImage']??'';
-    profilePic=json['profilePic']??'';
-    commentsCount=json["commentsCount"]??0;
-    if(DateTime.now().difference(DateTime.parse(json['dateTime'])).inSeconds == 0)
-    {
-      time = 'Just now';
-    }
-    if(DateTime.now().difference(DateTime.parse(json['dateTime'])).inMinutes < 1 && DateTime.now().difference(DateTime.parse(json['dateTime'])).inSeconds > 0)
-    {
-      time = '${DateTime.now().difference(DateTime.parse(json['dateTime'])).inSeconds} s';
-    }
-    if(DateTime.now().difference(DateTime.parse(json['dateTime'])).inMinutes >= 1)
-    {
-      time = '${DateTime.now().difference(DateTime.parse(json['dateTime'])).inMinutes} m';
-    }
-    if(DateTime.now().difference(DateTime.parse(json['dateTime'])).inHours >= 1)
-    {
-      time = '${DateTime.now().difference(DateTime.parse(json['dateTime'])).inHours} hours';
-    }
-    if(DateTime.now().difference(DateTime.parse(json['dateTime'])).inDays >= 1)
-    {
-      time = '${DateTime.now().difference(DateTime.parse(json['dateTime'])).inDays} days';
-    }
-    if(DateTime.now().difference(DateTime.parse(json['dateTime'])).inDays >= 1 && DateTime.now().difference(DateTime.parse(json['dateTime'])).inDays % 7 == 0)
-    {
-      time = '${(DateTime.now().difference(DateTime.parse(json['dateTime'])).inDays / 7).floor()} week';
-    }
-    if(DateTime.now().difference(DateTime.parse(json['dateTime'])).inDays >= 1 && DateTime.now().difference(DateTime.parse(json['dateTime'])).inDays % 30 == 0)
-    {
-      time = '${(DateTime.now().difference(DateTime.parse(json['dateTime'])).inDays / 30).floor()} m';
-    }
-  }
+  factory PostModel.fromJson(dynamic json)=>PostModel(
+    dateTime:json['dateTime']??'',
+    username:json['name']??'',
+    postText:json['postText']??'',
+    uId:json['uId']??'',
+    likes:List<String>.from(json['likes']),
+    postImage:json['postImage']??'',
+    profilePic:json['profilePic']??'',
+    commentsCount:json["commentsCount"]??0,
+    postImageWidth:json["postImageWidth"]??0,
+    postImageHeight:json["postImageHeight"]??0,
+  );
 
   Map<String ,dynamic> toMap(){
     return {
@@ -56,9 +32,12 @@ class PostModel extends Post{
       'dateTime':dateTime,
       'postText':postText,
       'uId':uId,
+      "commentsCount":commentsCount,
       'postImage':postImage,
       'profilePic':profilePic,
-      'postId':postId,
+      'postImageHeight':postImageHeight,
+      'postImageWidth':postImageWidth,
+      'likes':likes,
     };
   }
 

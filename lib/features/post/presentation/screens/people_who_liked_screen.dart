@@ -1,71 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:socialfy/core/utils/font_manager.dart';
-import 'package:socialfy/features/post/data/models/like_model.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:socialfy/app/injection_container.dart';
+import 'package:socialfy/core/utils/strings_manager.dart';
+import 'package:socialfy/core/widgets/custom_appbar.dart';
+import 'package:socialfy/features/post/presentation/cubit/get_post_likes_cubit/get_post_likes_cubit.dart';
+import 'package:socialfy/features/post/presentation/widgets/post_likes_screen_widgets/post_likes_screen_body.dart';
 class PeopleWhoLikedScreen extends StatelessWidget {
- final List<LikeModel> likes;
-  const PeopleWhoLikedScreen({Key? key, required this.likes}) : super(key: key);
-
+  final List<String> ids;
+  const PeopleWhoLikedScreen({Key? key, required this.ids}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return BlocProvider(
+      create: (context) => sl<GetPostLikesCubit>()..getPostLikes(ids),
+      child: SafeArea(
         child: Scaffold(
-      appBar: AppBar(
-        title: Text("People who Liked",style: Theme.of(context).appBarTheme.titleTextStyle!.copyWith(
-          fontSize: 20
-        ),),
+          backgroundColor: Theme.of(context).colorScheme.background,
+          appBar: const CustomAppBar(title: AppStrings.peopleWhoLiked),
+          body: const PostLikesScreenBody(),
+        ),
       ),
-      body: SingleChildScrollView(
-          child: Column(children:[
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: likes.length,
-              itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
-                child: Row(
-                  children: [
-                    Stack(
-                      children: [
-                       const SizedBox(
-                          height: 49,
-                         width: 49,
-                        ),
-                        CircleAvatar(
-                            radius: 22,
-                          backgroundColor: Colors.blue,
-                          child: CircleAvatar(
-                            backgroundImage: NetworkImage(likes[index].profilePic!),
-                            backgroundColor: Colors.grey,
-                            radius: 20,
-                          ),
-                        ),
-                      const Positioned(
-                        bottom:0,
-                        right:0,
-                          child: Icon(
-                        Icons.favorite_outlined,
-                        color: Colors.red,
-                      ))
-                    ],
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      likes[index].username!,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyText1!
-                          .copyWith(fontWeight: FontWeightManager.semiBold),
-                    ),
-                  ],
-                ),
-              );
-            },)
-          ])
-      ),
-    ));
+    );
   }
 }

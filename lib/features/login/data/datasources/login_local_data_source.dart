@@ -1,6 +1,6 @@
 import 'package:socialfy/core/shared/shared_prefrences_consumer.dart';
 import 'package:socialfy/core/utils/strings_manager.dart';
-import 'package:socialfy/features/profile/domain/entities/user.dart';
+import 'package:socialfy/core/entities/user.dart';
 abstract class LoginLocalDataSource{
   Future<void> saveUserData(User user);
 }

@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:socialfy/features/home/presentation/cubit/bottom_navigation_cubit.dart';
-
 class MainBottomNavigationBar extends StatelessWidget {
-  const MainBottomNavigationBar({Key? key}) : super(key: key);
+  final List<BottomNavigationBarItem> items;
+  final int index;
+  final ValueChanged<int>? onTap;
+  const MainBottomNavigationBar({Key? key,
+    required this.items,
+    required this.index,
+    this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      items: BlocProvider.of<BottomNavigationCubit>(context).getNavigationItems(context),
-      currentIndex:BlocProvider.of<BottomNavigationCubit>(context).bottomNavIndex,
-      onTap:(value){
-        BlocProvider.of<BottomNavigationCubit>(context).changeIndex(value,context);
-      } ,
+    return Theme(
+      data: Theme.of(context).copyWith(
+        splashFactory: NoSplash.splashFactory,
+        highlightColor:  Colors.transparent,
+      ),
+      child: BottomNavigationBar(
+      items: items,
+      currentIndex:index,
+      onTap:onTap,
+
+        ),
     );
   }
 }

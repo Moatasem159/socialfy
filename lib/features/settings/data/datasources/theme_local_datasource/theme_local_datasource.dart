@@ -13,6 +13,6 @@ class ThemeLocalDataSourceImpl implements ThemeLocalDataSource{
   @override
   Future<String> getTheme()async {
     return _sharedPrefrencesConsumer.containsKey(key: "appTheme")?
-    _sharedPrefrencesConsumer.getData(key: "appTheme"):"light";
+    _sharedPrefrencesConsumer.getData(key: "appTheme"):"system";
   }
 }

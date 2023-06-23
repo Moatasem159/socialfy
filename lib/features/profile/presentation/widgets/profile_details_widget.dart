@@ -1,10 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:socialfy/features/profile/data/models/user_model.dart';
+import 'package:socialfy/core/models/user_model.dart';
 
 class ProfileDetailsWidget extends StatelessWidget {
 
   final UserDataModel user;
   final int postCount;
+
   const ProfileDetailsWidget({Key? key, required this.user, required this.postCount}) : super(key: key);
 
   @override
@@ -12,15 +14,26 @@ class ProfileDetailsWidget extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15,vertical:15),
+          padding: const EdgeInsets.symmetric(horizontal: 14,vertical:5),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children:  [
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(user.profilePic!),
-                    radius: 40,
+                  CachedNetworkImage(
+                      imageUrl:user.profilePic!,
+                     width:75,
+                    height:75,
+                    imageBuilder: (context, imageProvider) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: imageProvider
+                          )
+                        ),
+                      );
+                    },
                   ),
                   Expanded(
                     child: Column(
@@ -65,14 +78,14 @@ class ProfileDetailsWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 2,),
-              Text(user.name!, style: Theme.of(context).textTheme.labelMedium!.copyWith(
+              const SizedBox(height: 3,),
+              Text(
+                user.name!, style: Theme.of(context).textTheme.labelMedium!.copyWith(
                 fontSize: 14,
-              ),)
+              ),),
             ],
           ),
         ),
-        // MainButton(onPressed: (){}, width:45, height: 40, child: const Text("Edit profile")),
       ],
     );
   }

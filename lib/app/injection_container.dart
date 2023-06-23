@@ -6,6 +6,25 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:socialfy/features/login/data/datasources/login_local_data_source.dart';
+import 'package:socialfy/features/login/data/datasources/login_remote_date_source.dart';
+import 'package:socialfy/features/post/data/datasources/local/gallery_data_source.dart';
+import 'package:socialfy/features/post/data/datasources/remote/comment_remote_data_source.dart';
+import 'package:socialfy/features/post/data/repositories/comment_repository_impl.dart';
+import 'package:socialfy/features/post/data/repositories/gallery_repository_impl.dart';
+import 'package:socialfy/features/post/domain/repositories/comment_repository.dart';
+import 'package:socialfy/features/post/domain/repositories/gallery_repository.dart';
+import 'package:socialfy/features/post/domain/usecases/get_album_images_usecase.dart';
+import 'package:socialfy/features/post/domain/usecases/get_post_likes_usecase.dart';
+import 'package:socialfy/features/post/domain/usecases/get_posts_usecase.dart';
+import 'package:socialfy/features/post/presentation/cubit/create_comment_cubit/create_comment_cubit.dart';
+import 'package:socialfy/features/post/presentation/cubit/create_post_cubit/create_post_cubit.dart';
+import 'package:socialfy/features/post/presentation/cubit/get_comments_cubit/get_comments_cubit.dart';
+import 'package:socialfy/features/post/presentation/cubit/get_gallery_cubit/get_gallery_cubit.dart';
+import 'package:socialfy/features/post/presentation/cubit/get_post_likes_cubit/get_post_likes_cubit.dart';
+import 'package:socialfy/features/post/presentation/cubit/like_comment_cubit/like_comment_cubit.dart';
+import 'package:socialfy/features/post/presentation/cubit/like_post_cubit/like_post_cubit.dart';
+import 'package:socialfy/features/post/presentation/cubit/news_feed_cubit/news_feed_cubit.dart';
 import 'package:socialfy/features/settings/data/datasources/theme_local_datasource/theme_local_datasource.dart';
 import 'package:socialfy/features/settings/data/repositories/theme_repository_impl.dart';
 import 'package:socialfy/features/settings/domain/repositories/theme_repository.dart';
@@ -18,25 +37,20 @@ import 'package:socialfy/core/network/network_info.dart';
 import 'package:socialfy/core/shared/shared_prefrences.dart';
 import 'package:socialfy/core/shared/shared_prefrences_consumer.dart';
 import 'package:socialfy/features/home/presentation/cubit/bottom_navigation_cubit.dart';
-import 'package:socialfy/features/login/data/data_sources/login_remote_date_source.dart';
 import 'package:socialfy/features/login/data/repositories/login_repository_impl.dart';
 import 'package:socialfy/features/login/domain/repositories/login_repository.dart';
 import 'package:socialfy/features/login/domain/usecases/login_use_case.dart';
 import 'package:socialfy/features/login/presentation/cubit/login_cubit.dart';
-import 'package:socialfy/features/post/data/datasources/post_local_data_source.dart';
-import 'package:socialfy/features/post/data/datasources/post_remote_data_source.dart';
+import 'package:socialfy/features/post/data/datasources/remote/post_remote_data_source.dart';
 import 'package:socialfy/features/post/data/repositories/post_repository_impl.dart';
 import 'package:socialfy/features/post/domain/repositories/post_repository.dart';
-import 'package:socialfy/features/post/domain/usecases/add_like_to_comment_usecase.dart';
+import 'package:socialfy/features/post/domain/usecases/like_comment_usecase.dart';
 import 'package:socialfy/features/post/domain/usecases/add_like_to_post_usecase.dart';
 import 'package:socialfy/features/post/domain/usecases/create_comment_usecase.dart';
 import 'package:socialfy/features/post/domain/usecases/create_post_usecase.dart';
 import 'package:socialfy/features/post/domain/usecases/delete_comment_usecase.dart';
 import 'package:socialfy/features/post/domain/usecases/delete_post_usecase.dart';
-import 'package:socialfy/features/post/domain/usecases/dislike_comment_usecase.dart';
-import 'package:socialfy/features/post/domain/usecases/dislike_post_use_case.dart';
-import 'package:socialfy/features/post/domain/usecases/get_images_from_gallery_usecase.dart';
-import 'package:socialfy/features/post/domain/usecases/get_new_feed_usecase.dart';
+import 'package:socialfy/features/post/domain/usecases/get_gallery_albums_usecase.dart';
 import 'package:socialfy/features/post/domain/usecases/get_post_comments_usecase.dart';
 import 'package:socialfy/features/post/presentation/cubit/post_cubit.dart';
 import 'package:socialfy/features/profile/data/data_sources/profile_remote_data_source.dart';
@@ -60,35 +74,32 @@ Future<void> init()async{
   sl.registerFactory<BottomNavigationCubit>(() => BottomNavigationCubit());
   sl.registerFactory<PostCubit>(() => PostCubit(
       deletePostUseCase: sl(),
-      getImageFromGalleryUseCase: sl(),
-      createPostUseCase: sl(),
-      getNewsFeedUseCase: sl(),
-      addLikeUseCase: sl(),
-      disLikeUseCase: sl(),
-    createCommentUseCase: sl(),
     deleteCommentUseCase: sl(),
-    addLikeToCommentUseCase: sl(),
-    disLikeCommentUseCase: sl(),
-    getPostCommentUseCase: sl(),
   ));
+
+  sl.registerFactory<CreatePostCubit>(() => CreatePostCubit(sl()));
+  sl.registerFactory<GetCommentsCubit>(() => GetCommentsCubit(sl()));
+  sl.registerFactory<LikeCommentCubit>(() => LikeCommentCubit(sl()));
+  sl.registerFactory<LikePostCubit>(() => LikePostCubit(sl()));
+  sl.registerFactory<CreateCommentCubit>(() => CreateCommentCubit(sl()));
+  sl.registerFactory<GetGalleryCubit>(() => GetGalleryCubit(sl(),sl()));
+  sl.registerFactory<NewsFeedCubit>(() => NewsFeedCubit(sl()));
+  sl.registerFactory<GetPostLikesCubit>(() => GetPostLikesCubit(sl()));
   sl.registerFactory<ProfileCubit>(() => ProfileCubit(getProfileUseCase:  sl(),sharedPrefrencesConsumer: sl()));
   sl.registerFactory<ThemeCubit>(() => ThemeCubit(sl(),sl()));
 
   /// data Source
-  sl.registerLazySingleton<PostRemoteDataSource>(
-          () => PostRemoteDataSourceImpl(fireBaseConsumer: sl()));
-  sl.registerLazySingleton<PostLocalDataSource>(
-          () => PostLocalDataSourceImpl());
+  sl.registerLazySingleton<PostRemoteDataSource>(() => PostRemoteDataSourceImpl(sl()));
+  sl.registerLazySingleton<CommentRemoteDataSource>(() => CommentRemoteDataSourceImpl(sl()));
+  sl.registerLazySingleton<GalleryLocalDataSource>(() => GalleryLocalDataSourceImpl());
   sl.registerLazySingleton<ProfileRemoteDataSource>(
           () => ProfileRemoteDataSourceImpl(fireBaseConsumer: sl()));
   sl.registerLazySingleton<ThemeLocalDataSource>(
           () => ThemeLocalDataSourceImpl(sl()));
-
-
   /// Repositories
-
-  sl.registerLazySingleton<PostRepository>(
-          () => PostRepositoryImpl(networkInfo: sl(),postLocalDataSource: sl(),postRemoteDataSource: sl()));
+  sl.registerLazySingleton<PostRepository>(() => PostRepositoryImpl(sl(),sl()));
+  sl.registerLazySingleton<GalleryRepository>(() => GalleryRepositoryImpl(sl()));
+  sl.registerLazySingleton<CommentRepository>(() => CommentRepositoryImpl(sl(),sl()));
 
   sl.registerLazySingleton<ProfileRepository>(
           () => ProfileRepositoryImpl(networkInfo: sl(),profileRemoteDataSources: sl()));
@@ -98,30 +109,22 @@ Future<void> init()async{
 
   ///use case
 
-  sl.registerLazySingleton<GetImageFromGalleryUseCase>(
-          () => GetImageFromGalleryUseCase(postRepository: sl()));
+  sl.registerLazySingleton<GetGalleryAlbumsUseCase>(() => GetGalleryAlbumsUseCase(sl()));
+  sl.registerLazySingleton<GetAlbumImagesUseCase>(() => GetAlbumImagesUseCase(sl()));
+  sl.registerLazySingleton<GetPostLikesUseCase>(() => GetPostLikesUseCase(sl()));
   sl.registerLazySingleton<CreatePostUseCase>(
           () => CreatePostUseCase(postRepository: sl()));
   sl.registerLazySingleton<DeletePostUseCase>(
           () => DeletePostUseCase(postRepository: sl()));
   sl.registerLazySingleton<GetProfileUseCase>(
           () => GetProfileUseCase(profileRepository: sl()));
-  sl.registerLazySingleton<GetNewsFeedUseCase>(
-          () => GetNewsFeedUseCase(postRepository: sl()));
-  sl.registerLazySingleton<AddLikeToPostUseCase>(
-          () => AddLikeToPostUseCase(postRepository: sl()));
-  sl.registerLazySingleton<DisLikePostUseCase>(
-          () => DisLikePostUseCase(postRepository: sl()));
-  sl.registerLazySingleton<CreateCommentUseCase>(
-          () => CreateCommentUseCase(postRepository: sl()));
-  sl.registerLazySingleton<GetPostCommentUseCase>(
-          () => GetPostCommentUseCase(postRepository: sl()));
-  sl.registerLazySingleton<DeleteCommentUseCase>(
-          () => DeleteCommentUseCase(postRepository: sl()));
-  sl.registerLazySingleton<AddLikeToCommentUseCase>(
-          () => AddLikeToCommentUseCase(postRepository: sl()));
-  sl.registerLazySingleton<DisLikeCommentUseCase>(
-          () => DisLikeCommentUseCase(postRepository: sl()));
+  sl.registerLazySingleton<GetPostsUseCase>(
+          () => GetPostsUseCase(sl()));
+  sl.registerLazySingleton<LikePostUseCase>(() => LikePostUseCase(postRepository: sl()));
+  sl.registerLazySingleton<CreateCommentUseCase>(() => CreateCommentUseCase(sl()));
+  sl.registerLazySingleton<GetPostCommentUseCase>(() => GetPostCommentUseCase(sl()));
+  sl.registerLazySingleton<DeleteCommentUseCase>(() => DeleteCommentUseCase(sl()));
+  sl.registerLazySingleton<LikeCommentUseCase>(() => LikeCommentUseCase(sl()));
   sl.registerLazySingleton<ChangeThemeUseCase>(() => ChangeThemeUseCase(sl()));
   sl.registerLazySingleton<GetThemeUseCase>(() => GetThemeUseCase(sl()));
 
@@ -150,7 +153,7 @@ Future<void> init()async{
   // sl.registerLazySingleton(() => fireBaseMessaging);
   sl.registerLazySingleton(() => InternetConnectionChecker());
   sl.registerLazySingleton(() => FlutterLocalNotificationsPlugin());
-  sl.registerLazySingleton<FireBaseConsumer>(() => FireBaseManager(client: sl(), auth: sl(),storage: sl(),
+  sl.registerLazySingleton<FireBaseConsumer>(() => FireBaseManager(sl(),sl(),sl(),
       // messaging: sl()
   ));
   sl.registerLazySingleton<SharedPrefrencesConsumer>(() => SharedPrefrencesManager(sl()));
@@ -171,10 +174,10 @@ initRegisterModule() {
 
 initLoginModule() {
   if (!GetIt.I.isRegistered<LoginUseCase>()) {
-    sl.registerFactory(() => LoginCubit(loginUseCase:sl(),sharedPrefrencesConsumer: sl()));
+    sl.registerFactory(() => LoginCubit(sl()));
     sl.registerLazySingleton<LoginUseCase>(() => LoginUseCase(loginRepository: sl()));
-    sl.registerLazySingleton<LoginRepository>(() => LoginRepositoryImpl(networkInfo: sl(),loginRemoteDataSource: sl()));
-    sl.registerLazySingleton<LoginRemoteDataSource>(() =>LoginRemoteDataSourceImpl(fireBaseConsumer: sl()));
+    sl.registerLazySingleton<LoginRepository>(() => LoginRepositoryImpl(sl(),sl(),sl()));
+    sl.registerLazySingleton<LoginRemoteDataSource>(() =>LoginRemoteDataSourceImpl(sl()));
+    sl.registerLazySingleton<LoginLocalDataSource>(() =>LoginLocalDataSourceImpl(sl()));
   }
-
 }
