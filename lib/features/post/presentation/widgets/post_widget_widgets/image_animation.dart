@@ -20,6 +20,7 @@ class _ImageLikeAnimationsState extends State<ImageLikeAnimations> {
     return GestureDetector(
       onDoubleTap: (){
         LikePostCubit.get(context).likePost(postId: widget.post.postId,likes: widget.post.likes!,isLiked: widget.post.isLiked);
+        widget.post.isLiked=!widget.post.isLiked;
         setState(() {
           isLiked=true;
           isHeartAnimating=true;

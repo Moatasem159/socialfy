@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:socialfy/core/extensions/empty_padding_extension.dart';
 import 'package:socialfy/core/extensions/screen_size_extension.dart';
 import 'package:socialfy/core/utils/icons_manager.dart';
 import 'package:socialfy/core/utils/strings_manager.dart';
@@ -12,7 +13,7 @@ class CommentTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: context.getWidth(),
+      width: context.getWidth(w: 10),
       height: 60,
       color: Theme.of(context).primaryColorLight,
       child: Padding(
@@ -54,9 +55,7 @@ class CommentTextField extends StatelessWidget {
                   }
               ),
             ),
-            const SizedBox(
-              width:5,
-            ),
+            5.pw,
             NoneBorderTextFormField(size: 240,
                 controller:CreateCommentCubit.get(context)
                   .commentController,hintText:AppStrings.addComment),

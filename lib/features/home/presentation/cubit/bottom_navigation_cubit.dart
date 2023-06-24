@@ -8,14 +8,13 @@ import 'package:socialfy/features/messenger/presentation/screens/messenger_scree
 import 'package:socialfy/features/notifications/presentation/screens/notifications_screen.dart';
 import 'package:socialfy/features/post/presentation/screens/create_post_screen.dart';
 import 'package:socialfy/features/post/presentation/screens/news_feed_screen.dart';
-import 'package:socialfy/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:socialfy/features/profile/presentation/screens/profile_screen.dart';
 class BottomNavigationCubit extends Cubit<BottomNavigationStates> {
   BottomNavigationCubit() : super(BottomNavigationInitialState());
   List<BottomNavigationBarItem> getNavigationItems(BuildContext context) {
     return [
       const BottomNavigationBarItem(
-          icon: Icon(Icons.home_outlined), label: ""),
+          icon: Icon(Icons.home_rounded), label: ""),
       const BottomNavigationBarItem(
           icon: Icon(Icons.search),
           label: ""),
@@ -72,29 +71,14 @@ class BottomNavigationCubit extends Cubit<BottomNavigationStates> {
   ScrollController homeController=ScrollController();
   void changeIndex(int index, BuildContext context) {
     emit(ChangeBottomNavLoadingState());
-    // if(index==0) {
-    //   homeController.animateTo(
-    //       0,
-    //       duration:const Duration(milliseconds: 100),
-    //       curve: Curves.easeIn);
-    //   bottomNavIndex = index;
-    // }
     if (index == 2) {
       Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => const CreatePostScreen(),
       ));
     }
-    else if (index==4){
-      if(BlocProvider.of<ProfileCubit>(context).profile==null){
-        BlocProvider.of<ProfileCubit>(context).getProfile();
-      }
-      BlocProvider.of<ProfileCubit>(context).getUserPost(context: context);
-      bottomNavIndex = index;
-    }
     else{
       bottomNavIndex = index;
     }
-
     emit(ChangeBottomNavDoneState());
   }
 }

@@ -13,6 +13,7 @@ class PostButtons extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           LikePostButton(post: post),
           17.pw,

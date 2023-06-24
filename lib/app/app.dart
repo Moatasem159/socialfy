@@ -3,10 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:socialfy/app/injection_container.dart' as di;
 import 'package:socialfy/config/routes/routes_manager.dart';
 import 'package:socialfy/config/themes/app_theme.dart';
-import 'package:socialfy/features/post/presentation/cubit/news_feed_cubit/news_feed_cubit.dart';
+import 'package:socialfy/features/post/presentation/cubit/get_posts_cubit/news_feed_cubit.dart';
+import 'package:socialfy/features/post/presentation/cubit/like_post_cubit/like_post_cubit.dart';
+import 'package:socialfy/features/profile/presentation/cubit/user_posts_cubit/user_posts_cubit.dart';
 import 'package:socialfy/features/settings/presentation/cubit/theme_cubit/theme_cubit.dart';
-import 'package:socialfy/features/post/presentation/cubit/post_cubit.dart';
-import 'package:socialfy/features/profile/presentation/cubit/profile_cubit.dart';
+import 'package:socialfy/features/profile/presentation/cubit/profile_cubit/profile_cubit.dart';
 import 'package:socialfy/features/settings/presentation/cubit/theme_cubit/theme_state.dart';
 class Socialfy extends StatelessWidget {
   const Socialfy({Key? key}) : super(key: key);
@@ -14,9 +15,10 @@ class Socialfy extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => di.sl<PostCubit>()),
-        BlocProvider(create: (context) => di.sl<NewsFeedCubit>()..getPosts()),
-        BlocProvider(create: (context) => di.sl<ProfileCubit>()),
+        BlocProvider(create: (context) => di.sl<GetPostsCubit>()),
+        BlocProvider(create: (context) => di.sl<UserPostsCubit>()),
+        BlocProvider(create: (context) => di.sl<LikePostCubit>()),
+        BlocProvider(create: (context) => di.sl<ProfileCubit>()..getProfile()),
         BlocProvider(create: (context) => di.sl<ThemeCubit>()..getTheme())
       ],
       child: BlocBuilder<ThemeCubit, ThemeStates>(

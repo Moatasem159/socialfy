@@ -1,9 +1,9 @@
+import 'package:get_it/get_it.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socialfy/features/login/data/datasources/login_local_data_source.dart';
@@ -19,12 +19,15 @@ import 'package:socialfy/features/post/domain/usecases/get_post_likes_usecase.da
 import 'package:socialfy/features/post/domain/usecases/get_posts_usecase.dart';
 import 'package:socialfy/features/post/presentation/cubit/create_comment_cubit/create_comment_cubit.dart';
 import 'package:socialfy/features/post/presentation/cubit/create_post_cubit/create_post_cubit.dart';
+import 'package:socialfy/features/post/presentation/cubit/delete_comment_cubit/delete_comment_cubit.dart';
 import 'package:socialfy/features/post/presentation/cubit/get_comments_cubit/get_comments_cubit.dart';
 import 'package:socialfy/features/post/presentation/cubit/get_gallery_cubit/get_gallery_cubit.dart';
 import 'package:socialfy/features/post/presentation/cubit/get_post_likes_cubit/get_post_likes_cubit.dart';
+import 'package:socialfy/features/post/presentation/cubit/get_posts_cubit/news_feed_cubit.dart';
 import 'package:socialfy/features/post/presentation/cubit/like_comment_cubit/like_comment_cubit.dart';
 import 'package:socialfy/features/post/presentation/cubit/like_post_cubit/like_post_cubit.dart';
-import 'package:socialfy/features/post/presentation/cubit/news_feed_cubit/news_feed_cubit.dart';
+import 'package:socialfy/features/profile/data/datasources/profile_remote_data_source.dart';
+import 'package:socialfy/features/profile/presentation/cubit/user_posts_cubit/user_posts_cubit.dart';
 import 'package:socialfy/features/settings/data/datasources/theme_local_datasource/theme_local_datasource.dart';
 import 'package:socialfy/features/settings/data/repositories/theme_repository_impl.dart';
 import 'package:socialfy/features/settings/domain/repositories/theme_repository.dart';
@@ -52,12 +55,11 @@ import 'package:socialfy/features/post/domain/usecases/delete_comment_usecase.da
 import 'package:socialfy/features/post/domain/usecases/delete_post_usecase.dart';
 import 'package:socialfy/features/post/domain/usecases/get_gallery_albums_usecase.dart';
 import 'package:socialfy/features/post/domain/usecases/get_post_comments_usecase.dart';
-import 'package:socialfy/features/post/presentation/cubit/post_cubit.dart';
-import 'package:socialfy/features/profile/data/data_sources/profile_remote_data_source.dart';
+import 'package:socialfy/features/post/presentation/cubit/delete_post_cubit/delete_post_cubit.dart';
 import 'package:socialfy/features/profile/data/repositories/profile_repository_impl.dart';
 import 'package:socialfy/features/profile/domain/repositories/profile_repository.dart';
 import 'package:socialfy/features/profile/domain/usecase/get_profile_usecase.dart';
-import 'package:socialfy/features/profile/presentation/cubit/profile_cubit.dart';
+import 'package:socialfy/features/profile/presentation/cubit/profile_cubit/profile_cubit.dart';
 import 'package:socialfy/features/register/data/datasources/register_remote_data_source.dart';
 import 'package:socialfy/features/register/data/repositories/register_repository_impl.dart';
 import 'package:socialfy/features/register/domain/repositories/register_repository.dart';
@@ -72,18 +74,16 @@ Future<void> init()async{
   ///bloc
 
   sl.registerFactory<BottomNavigationCubit>(() => BottomNavigationCubit());
-  sl.registerFactory<PostCubit>(() => PostCubit(
-      deletePostUseCase: sl(),
-    deleteCommentUseCase: sl(),
-  ));
-
+  sl.registerFactory<DeletePostCubit>(() => DeletePostCubit(sl()));
+  sl.registerFactory<DeleteCommentCubit>(() => DeleteCommentCubit(sl()));
   sl.registerFactory<CreatePostCubit>(() => CreatePostCubit(sl()));
   sl.registerFactory<GetCommentsCubit>(() => GetCommentsCubit(sl()));
   sl.registerFactory<LikeCommentCubit>(() => LikeCommentCubit(sl()));
   sl.registerFactory<LikePostCubit>(() => LikePostCubit(sl()));
   sl.registerFactory<CreateCommentCubit>(() => CreateCommentCubit(sl()));
   sl.registerFactory<GetGalleryCubit>(() => GetGalleryCubit(sl(),sl()));
-  sl.registerFactory<NewsFeedCubit>(() => NewsFeedCubit(sl()));
+  sl.registerFactory<GetPostsCubit>(() => GetPostsCubit(sl()));
+  sl.registerFactory<UserPostsCubit>(() => UserPostsCubit());
   sl.registerFactory<GetPostLikesCubit>(() => GetPostLikesCubit(sl()));
   sl.registerFactory<ProfileCubit>(() => ProfileCubit(getProfileUseCase:  sl(),sharedPrefrencesConsumer: sl()));
   sl.registerFactory<ThemeCubit>(() => ThemeCubit(sl(),sl()));
@@ -92,34 +92,23 @@ Future<void> init()async{
   sl.registerLazySingleton<PostRemoteDataSource>(() => PostRemoteDataSourceImpl(sl()));
   sl.registerLazySingleton<CommentRemoteDataSource>(() => CommentRemoteDataSourceImpl(sl()));
   sl.registerLazySingleton<GalleryLocalDataSource>(() => GalleryLocalDataSourceImpl());
-  sl.registerLazySingleton<ProfileRemoteDataSource>(
-          () => ProfileRemoteDataSourceImpl(fireBaseConsumer: sl()));
-  sl.registerLazySingleton<ThemeLocalDataSource>(
-          () => ThemeLocalDataSourceImpl(sl()));
+  sl.registerLazySingleton<ProfileRemoteDataSource>(() => ProfileRemoteDataSourceImpl(sl()));
+  sl.registerLazySingleton<ThemeLocalDataSource>(() => ThemeLocalDataSourceImpl(sl()));
   /// Repositories
   sl.registerLazySingleton<PostRepository>(() => PostRepositoryImpl(sl(),sl()));
   sl.registerLazySingleton<GalleryRepository>(() => GalleryRepositoryImpl(sl()));
   sl.registerLazySingleton<CommentRepository>(() => CommentRepositoryImpl(sl(),sl()));
-
-  sl.registerLazySingleton<ProfileRepository>(
-          () => ProfileRepositoryImpl(networkInfo: sl(),profileRemoteDataSources: sl()));
-  sl.registerLazySingleton<ThemeRepository>(
-          () => ThemeRepositoryImpl(sl()));
-
-
+  sl.registerLazySingleton<ProfileRepository>(() => ProfileRepositoryImpl( sl(),sl()));
+  sl.registerLazySingleton<ThemeRepository>(() => ThemeRepositoryImpl(sl()));
   ///use case
 
   sl.registerLazySingleton<GetGalleryAlbumsUseCase>(() => GetGalleryAlbumsUseCase(sl()));
   sl.registerLazySingleton<GetAlbumImagesUseCase>(() => GetAlbumImagesUseCase(sl()));
   sl.registerLazySingleton<GetPostLikesUseCase>(() => GetPostLikesUseCase(sl()));
-  sl.registerLazySingleton<CreatePostUseCase>(
-          () => CreatePostUseCase(postRepository: sl()));
-  sl.registerLazySingleton<DeletePostUseCase>(
-          () => DeletePostUseCase(postRepository: sl()));
-  sl.registerLazySingleton<GetProfileUseCase>(
-          () => GetProfileUseCase(profileRepository: sl()));
-  sl.registerLazySingleton<GetPostsUseCase>(
-          () => GetPostsUseCase(sl()));
+  sl.registerLazySingleton<CreatePostUseCase>(() => CreatePostUseCase(postRepository: sl()));
+  sl.registerLazySingleton<DeletePostUseCase>(() => DeletePostUseCase(postRepository: sl()));
+  sl.registerLazySingleton<GetProfileUseCase>(() => GetProfileUseCase(sl()));
+  sl.registerLazySingleton<GetPostsUseCase>(() => GetPostsUseCase(sl()));
   sl.registerLazySingleton<LikePostUseCase>(() => LikePostUseCase(postRepository: sl()));
   sl.registerLazySingleton<CreateCommentUseCase>(() => CreateCommentUseCase(sl()));
   sl.registerLazySingleton<GetPostCommentUseCase>(() => GetPostCommentUseCase(sl()));

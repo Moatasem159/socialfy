@@ -4,8 +4,8 @@ import 'package:socialfy/config/routes/routes_manager.dart';
 import 'package:socialfy/core/utils/app_text_styles.dart';
 import 'package:socialfy/core/utils/font_manager.dart';
 import 'package:socialfy/core/widgets/buttons.dart';
-import 'package:socialfy/features/profile/presentation/cubit/profile_cubit.dart';
-import 'package:socialfy/features/profile/presentation/cubit/profile_state.dart';
+import 'package:socialfy/features/profile/presentation/cubit/profile_cubit/profile_cubit.dart';
+import 'package:socialfy/features/profile/presentation/cubit/profile_cubit/profile_state.dart';
 
 class LogoutButton extends StatelessWidget {
   const LogoutButton({super.key});

@@ -1,47 +1,26 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:socialfy/features/post/domain/entities/post.dart';
-import 'package:socialfy/features/profile/presentation/screens/posts_screen.dart';
-import 'package:socialfy/features/profile/presentation/widgets/post_dialog.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:socialfy/features/profile/presentation/cubit/user_posts_cubit/user_posts_cubit.dart';
+import 'package:socialfy/features/profile/presentation/cubit/user_posts_cubit/user_posts_state.dart';
+import 'package:socialfy/features/profile/presentation/widgets/user_post_card.dart';
 class ProfilePostsList extends StatelessWidget {
-  final List<Post> posts;
-
-  const ProfilePostsList({Key? key, required this.posts}) : super(key: key);
-
+  const ProfilePostsList({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return SliverGrid(
-      delegate: SliverChildBuilderDelegate(
-          childCount: posts.length,
-              (context, index) {
-            return GestureDetector(
-              onLongPress: () {
-                showDialog(context: context, builder:(context) => PostDialog(post: posts[index]),);
-              },
-              child: CachedNetworkImage(
-                imageUrl:posts[index].postImage!,
-                fit: BoxFit.cover,
-                placeholder: (context, url) => Container(
-                  color: Colors.grey,
-                ),
-              ),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          PostsScreen(posts: posts, index: index),
-                    ));
-                // BlocProvider.of<ProfileCubit>(context).scrollToPost(index: index.toDouble());
-              },
-            );
-          }),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          crossAxisSpacing: 3,
-          mainAxisSpacing: 3,
-      ),
+    return BlocBuilder<UserPostsCubit, UserPostsStates>(
+      builder: (context, state) {
+        return SliverGrid(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              crossAxisSpacing: 3,
+              mainAxisSpacing: 3,
+            ),
+            delegate: SliverChildBuilderDelegate(
+                childCount: UserPostsCubit.get(context).userPosts.length,
+                (context, index) => UserPostCard(
+                    posts: UserPostsCubit.get(context).userPosts,
+                    index: index)));
+      },
     );
   }
 }

@@ -10,8 +10,6 @@ class PostListWidget extends StatelessWidget {
       physics: const BouncingScrollPhysics(),
       shrinkWrap: true,
       itemCount: posts.length,
-      itemBuilder: (context, index) {
-      return PostWidget(post: posts[index]);
-    },);
+      itemBuilder: (context, index)=> PostWidget(post: posts[index]));
   }
 }
