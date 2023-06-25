@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:socialfy/app/injection_container.dart';
 import 'package:socialfy/config/routes/routes_manager.dart';
 import 'package:socialfy/core/utils/font_manager.dart';
 import 'package:socialfy/core/utils/strings_manager.dart';
@@ -8,19 +7,16 @@ import 'package:socialfy/features/home/presentation/cubit/bottom_navigation_cubi
 import 'package:socialfy/features/home/presentation/cubit/bottom_navigation_state.dart';
 import 'package:socialfy/features/home/presentation/widgets/bottom_navigation_bar.dart';
 import 'package:socialfy/features/post/presentation/screens/create_post_screen.dart';
-
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
-
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
-
 class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => sl<BottomNavigationCubit>(),
+      create: (context) => BottomNavigationCubit(),
       child: BlocConsumer<BottomNavigationCubit, BottomNavigationStates>(
         listener: (context, state) {},
         builder: (context, state) {

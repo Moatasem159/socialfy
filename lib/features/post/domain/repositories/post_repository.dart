@@ -9,6 +9,5 @@ abstract class PostRepository {
   Future<Either<Failure, dynamic>> deletePost(
       {required String postId, required String postImage});
   Stream<QuerySnapshot<Object>> getPosts();
-  Future<Either<Failure, dynamic>> getPostLikes({required List<String> ids});
   Future<Either<Failure, dynamic>> likes({required String postId,required List<String> likes});
 }

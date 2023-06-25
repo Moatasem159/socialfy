@@ -5,7 +5,7 @@ abstract class FireBaseConsumer {
   Future<QuerySnapshot> getCollections({required String collectionName});
   Stream<QuerySnapshot<Object>> streamListen({required String collectionName});
   Stream<QuerySnapshot<Object>> streamListenDeep1({required String collectionName,
-  required String docName,required,required String collectionName2});
+    bool descending=true, required String docName,required String collectionName2,String order="dateTime"});
   Future<dynamic> add({required String collectionName, required Map<String, dynamic> body});
 
   Future<dynamic> addDeep1(
@@ -63,8 +63,7 @@ abstract class FireBaseConsumer {
   Future<dynamic> getCollectionDeep1(
       {required String collectionName1,
       required String docName1,
-      required String collectionName2,
-      required String order});
+      required String collectionName2});
 
   Future<dynamic> getCollectionDeep2(
       {required String collectionName1,

@@ -101,13 +101,11 @@ class FireBaseManager extends FireBaseConsumer {
   Future getCollectionDeep1(
       {required String collectionName1,
       required String docName1,
-      required String collectionName2,
-      required String order}) async {
+      required String collectionName2}) async {
     return await _client
         .collection(collectionName1)
         .doc(docName1)
         .collection(collectionName2)
-        .orderBy(order)
         .get();
   }
 
@@ -230,8 +228,10 @@ class FireBaseManager extends FireBaseConsumer {
 
   @override
   Stream<QuerySnapshot<Object>> streamListenDeep1(
-  {required String collectionName, required String docName, required, required String collectionName2}) {
+  {required String collectionName,String order="dateTime",
+    bool descending=true,
+    required String docName,required String collectionName2}) {
    return _client.collection(collectionName)
-       .doc(docName).collection(collectionName2).orderBy('dateTime', descending: true).snapshots();
+       .doc(docName).collection(collectionName2).orderBy(order, descending: descending).snapshots();
   }
 }

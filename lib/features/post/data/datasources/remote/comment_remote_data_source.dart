@@ -88,6 +88,7 @@ class CommentRemoteDataSourceImpl implements CommentRemoteDataSource {
   @override
   Stream<QuerySnapshot<Object>> getComments({required String postId}) {
     return _fireBaseConsumer.streamListenDeep1(
+
         collectionName: EndPoints.postCollection, docName: postId, collectionName2: EndPoints.commentCollection);
   }
 }

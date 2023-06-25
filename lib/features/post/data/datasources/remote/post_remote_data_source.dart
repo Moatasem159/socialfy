@@ -8,7 +8,6 @@ abstract class PostRemoteDataSource {
   Future<dynamic> deletePost({required String postId, required String postImage});
   Stream<QuerySnapshot<Object>> getPosts();
   Future<dynamic> likePost({required String postId, required List<String> likes});
-  Future<List<QueryDocumentSnapshot<Object?>>> getPostLikes();
 }
 
 class PostRemoteDataSourceImpl implements PostRemoteDataSource {
@@ -38,7 +37,6 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
         docName: postId,
         body: {"likes": likes});
   }
-
   @override
   Future deletePost({required String postId, required String postImage}) async {
     return await _fireBaseConsumer
@@ -47,14 +45,4 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
       await _fireBaseConsumer.deleteImage(link: postImage);
     });
   }
-
-  @override
-  Future<List<QueryDocumentSnapshot<Object?>>> getPostLikes() async{
-    List<QueryDocumentSnapshot<Object?>> users=[];
-    QuerySnapshot response= await _fireBaseConsumer.getCollections(collectionName: EndPoints.userCollection);
-    users.addAll(response.docs);
-    return users;
-  }
-
-
 }

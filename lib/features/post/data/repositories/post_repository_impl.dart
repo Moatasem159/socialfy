@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:socialfy/core/error/failures.dart';
-import 'package:socialfy/core/models/user_model.dart';
 import 'package:socialfy/core/network/network_info.dart';
 import 'package:socialfy/core/utils/strings_manager.dart';
 import 'package:socialfy/features/post/data/datasources/remote/post_remote_data_source.dart';
@@ -62,25 +61,6 @@ class PostRepositoryImpl implements PostRepository {
         return right(response);
       } on FirebaseException catch (error) {
         return left(DeletePostFailures(message: error.message));
-      }
-    } else {
-      return left(const ServerFailure(message: AppStrings.serverError));
-    }
-  }
-  @override
-  Future<Either<Failure, dynamic>> getPostLikes({required List<String> ids}) async{
-    if (await _networkInfo.isConnected) {
-      List<UserDataModel> users = [];
-      try {
-        final response=await _postRemoteDataSource.getPostLikes();
-        for (var element in response ){
-          if(ids.contains(element["uId"])){
-            users.add(UserDataModel.fromJson(element.data()!));
-          }
-        }
-        return Right(users);
-      } on FirebaseException catch (error) {
-        return left(DisCommentLikeFailures(message: error.message));
       }
     } else {
       return left(const ServerFailure(message: AppStrings.serverError));

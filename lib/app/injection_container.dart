@@ -8,6 +8,17 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socialfy/features/login/data/datasources/login_local_data_source.dart';
 import 'package:socialfy/features/login/data/datasources/login_remote_date_source.dart';
+import 'package:socialfy/features/messenger/data/datasources/chat_remote_data_source.dart';
+import 'package:socialfy/features/messenger/data/repositories/chat_repository_impl.dart';
+import 'package:socialfy/features/messenger/domain/repositories/chat_repository.dart';
+import 'package:socialfy/features/messenger/domain/usecases/create_chat_usecase.dart';
+import 'package:socialfy/features/messenger/domain/usecases/get_chat_messages_usecase.dart';
+import 'package:socialfy/features/messenger/domain/usecases/get_user_chats_usecase.dart';
+import 'package:socialfy/features/messenger/domain/usecases/get_users_usecase.dart';
+import 'package:socialfy/features/messenger/domain/usecases/send_message_usecase.dart';
+import 'package:socialfy/features/messenger/presentation/cubits/chat_cubit/chat_cubit.dart';
+import 'package:socialfy/features/messenger/presentation/cubits/get_all_user_cubit/get_all_users_cubit.dart';
+import 'package:socialfy/features/messenger/presentation/cubits/send_message_cubit/send_message_cubit.dart';
 import 'package:socialfy/features/post/data/datasources/local/gallery_data_source.dart';
 import 'package:socialfy/features/post/data/datasources/remote/comment_remote_data_source.dart';
 import 'package:socialfy/features/post/data/repositories/comment_repository_impl.dart';
@@ -15,19 +26,16 @@ import 'package:socialfy/features/post/data/repositories/gallery_repository_impl
 import 'package:socialfy/features/post/domain/repositories/comment_repository.dart';
 import 'package:socialfy/features/post/domain/repositories/gallery_repository.dart';
 import 'package:socialfy/features/post/domain/usecases/get_album_images_usecase.dart';
-import 'package:socialfy/features/post/domain/usecases/get_post_likes_usecase.dart';
 import 'package:socialfy/features/post/domain/usecases/get_posts_usecase.dart';
 import 'package:socialfy/features/post/presentation/cubit/create_comment_cubit/create_comment_cubit.dart';
 import 'package:socialfy/features/post/presentation/cubit/create_post_cubit/create_post_cubit.dart';
 import 'package:socialfy/features/post/presentation/cubit/delete_comment_cubit/delete_comment_cubit.dart';
 import 'package:socialfy/features/post/presentation/cubit/get_comments_cubit/get_comments_cubit.dart';
 import 'package:socialfy/features/post/presentation/cubit/get_gallery_cubit/get_gallery_cubit.dart';
-import 'package:socialfy/features/post/presentation/cubit/get_post_likes_cubit/get_post_likes_cubit.dart';
 import 'package:socialfy/features/post/presentation/cubit/get_posts_cubit/news_feed_cubit.dart';
 import 'package:socialfy/features/post/presentation/cubit/like_comment_cubit/like_comment_cubit.dart';
 import 'package:socialfy/features/post/presentation/cubit/like_post_cubit/like_post_cubit.dart';
 import 'package:socialfy/features/profile/data/datasources/profile_remote_data_source.dart';
-import 'package:socialfy/features/profile/presentation/cubit/user_posts_cubit/user_posts_cubit.dart';
 import 'package:socialfy/features/settings/data/datasources/theme_local_datasource/theme_local_datasource.dart';
 import 'package:socialfy/features/settings/data/repositories/theme_repository_impl.dart';
 import 'package:socialfy/features/settings/domain/repositories/theme_repository.dart';
@@ -39,7 +47,6 @@ import 'package:socialfy/core/firebase/firebase_consumer.dart';
 import 'package:socialfy/core/network/network_info.dart';
 import 'package:socialfy/core/shared/shared_prefrences.dart';
 import 'package:socialfy/core/shared/shared_prefrences_consumer.dart';
-import 'package:socialfy/features/home/presentation/cubit/bottom_navigation_cubit.dart';
 import 'package:socialfy/features/login/data/repositories/login_repository_impl.dart';
 import 'package:socialfy/features/login/domain/repositories/login_repository.dart';
 import 'package:socialfy/features/login/domain/usecases/login_use_case.dart';
@@ -73,7 +80,6 @@ Future<void> init()async{
 
   ///bloc
 
-  sl.registerFactory<BottomNavigationCubit>(() => BottomNavigationCubit());
   sl.registerFactory<DeletePostCubit>(() => DeletePostCubit(sl()));
   sl.registerFactory<DeleteCommentCubit>(() => DeleteCommentCubit(sl()));
   sl.registerFactory<CreatePostCubit>(() => CreatePostCubit(sl()));
@@ -83,10 +89,11 @@ Future<void> init()async{
   sl.registerFactory<CreateCommentCubit>(() => CreateCommentCubit(sl()));
   sl.registerFactory<GetGalleryCubit>(() => GetGalleryCubit(sl(),sl()));
   sl.registerFactory<GetPostsCubit>(() => GetPostsCubit(sl()));
-  sl.registerFactory<UserPostsCubit>(() => UserPostsCubit());
-  sl.registerFactory<GetPostLikesCubit>(() => GetPostLikesCubit(sl()));
   sl.registerFactory<ProfileCubit>(() => ProfileCubit(getProfileUseCase:  sl(),sharedPrefrencesConsumer: sl()));
   sl.registerFactory<ThemeCubit>(() => ThemeCubit(sl(),sl()));
+  sl.registerFactory<GetAllUsersCubit>(() => GetAllUsersCubit(sl(),sl()));
+  sl.registerFactory<ChatCubit>(() => ChatCubit(sl()));
+  sl.registerFactory<SendMessageCubit>(() => SendMessageCubit(sl(),sl()));
 
   /// data Source
   sl.registerLazySingleton<PostRemoteDataSource>(() => PostRemoteDataSourceImpl(sl()));
@@ -94,17 +101,18 @@ Future<void> init()async{
   sl.registerLazySingleton<GalleryLocalDataSource>(() => GalleryLocalDataSourceImpl());
   sl.registerLazySingleton<ProfileRemoteDataSource>(() => ProfileRemoteDataSourceImpl(sl()));
   sl.registerLazySingleton<ThemeLocalDataSource>(() => ThemeLocalDataSourceImpl(sl()));
+  sl.registerLazySingleton<ChatRemoteDataSource>(() => ChatRemoteDataSourceImpl(sl()));
   /// Repositories
   sl.registerLazySingleton<PostRepository>(() => PostRepositoryImpl(sl(),sl()));
   sl.registerLazySingleton<GalleryRepository>(() => GalleryRepositoryImpl(sl()));
   sl.registerLazySingleton<CommentRepository>(() => CommentRepositoryImpl(sl(),sl()));
   sl.registerLazySingleton<ProfileRepository>(() => ProfileRepositoryImpl( sl(),sl()));
   sl.registerLazySingleton<ThemeRepository>(() => ThemeRepositoryImpl(sl()));
+  sl.registerLazySingleton<ChatRepository>(() => ChatRepositoryImpl(sl(),sl()));
   ///use case
 
   sl.registerLazySingleton<GetGalleryAlbumsUseCase>(() => GetGalleryAlbumsUseCase(sl()));
   sl.registerLazySingleton<GetAlbumImagesUseCase>(() => GetAlbumImagesUseCase(sl()));
-  sl.registerLazySingleton<GetPostLikesUseCase>(() => GetPostLikesUseCase(sl()));
   sl.registerLazySingleton<CreatePostUseCase>(() => CreatePostUseCase(postRepository: sl()));
   sl.registerLazySingleton<DeletePostUseCase>(() => DeletePostUseCase(postRepository: sl()));
   sl.registerLazySingleton<GetProfileUseCase>(() => GetProfileUseCase(sl()));
@@ -116,6 +124,12 @@ Future<void> init()async{
   sl.registerLazySingleton<LikeCommentUseCase>(() => LikeCommentUseCase(sl()));
   sl.registerLazySingleton<ChangeThemeUseCase>(() => ChangeThemeUseCase(sl()));
   sl.registerLazySingleton<GetThemeUseCase>(() => GetThemeUseCase(sl()));
+  sl.registerLazySingleton<GetAllUsersUsecase>(() => GetAllUsersUsecase(sl()));
+  sl.registerLazySingleton<GetChatMessagesUseCase>(() => GetChatMessagesUseCase(sl()));
+  sl.registerLazySingleton<GetUserChatsUseCase>(() => GetUserChatsUseCase(sl()));
+  sl.registerLazySingleton<CreateChatUseCase>(() => CreateChatUseCase(sl()));
+  sl.registerLazySingleton<SendMessageUseCase>(() => SendMessageUseCase(sl()));
+
 
 
   //// core

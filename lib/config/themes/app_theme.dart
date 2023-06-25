@@ -6,6 +6,9 @@ import 'package:socialfy/core/utils/values_manager.dart';
 class AppTheme{
   static final lightTheme=ThemeData(
     fontFamily: FontConstants.fontFamily,
+    bottomSheetTheme: const BottomSheetThemeData(
+      backgroundColor: AppColors.backGroundLightThemeColor
+    ),
     primaryColorLight: Colors.white,
     colorScheme: const ColorScheme.light().copyWith(background: AppColors.backGroundLightThemeColor),
     primaryColor: AppColors.primaryLightThemeColor,
@@ -40,9 +43,9 @@ class AppTheme{
         ))
       )
     ),
-    inputDecorationTheme: InputDecorationTheme(
-    hintStyle: const TextStyle(color: Colors.grey),
-    contentPadding: const EdgeInsets.symmetric(horizontal: 3, vertical: 0),
+    inputDecorationTheme: const InputDecorationTheme(
+    hintStyle: TextStyle(color: Colors.grey),
+    contentPadding: EdgeInsets.symmetric(horizontal: 3, vertical: 0),
     suffixIconColor:AppColors.primaryLightThemeColor,
     prefixIconColor: AppColors.primaryLightThemeColor,
     focusedBorder: UnderlineInputBorder(
@@ -55,14 +58,14 @@ class AppTheme{
           color:AppColors.primaryLightThemeColor,
         )
     ),
-    errorBorder: const UnderlineInputBorder(
+    errorBorder: UnderlineInputBorder(
         borderSide: BorderSide(
           width: 1,
           color:Colors.red
         )
     ),
     ),
-    bottomNavigationBarTheme:  BottomNavigationBarThemeData(
+    bottomNavigationBarTheme:  const BottomNavigationBarThemeData(
       elevation: 0,
       showUnselectedLabels: false,
       showSelectedLabels: false,
@@ -79,6 +82,9 @@ class AppTheme{
     colorScheme: const ColorScheme.dark().copyWith(
       background: AppColors.backGroundDarkThemeColor,
     ),
+    bottomSheetTheme:const BottomSheetThemeData(
+          backgroundColor: AppColors.backGroundDarkThemeColor,
+  ),
     primaryColor: AppColors.primaryDarkThemeColor,
     fontFamily: FontConstants.fontFamily,
     primaryColorLight: Colors.grey[900],
@@ -114,11 +120,11 @@ class AppTheme{
               )
           ),
       ),
-    inputDecorationTheme:  InputDecorationTheme(
-      hintStyle: const TextStyle(
+    inputDecorationTheme:  const InputDecorationTheme(
+      hintStyle: TextStyle(
           color: Colors.grey
       ),
-        contentPadding: const EdgeInsets.symmetric(
+        contentPadding: EdgeInsets.symmetric(
             horizontal: 3, vertical: 0),
       suffixIconColor:AppColors.primaryDarkThemeColor,
       prefixIconColor: AppColors.primaryDarkThemeColor,
@@ -136,7 +142,7 @@ class AppTheme{
             color:AppColors.primaryDarkThemeColor,
           )
       ),
-      errorBorder: const UnderlineInputBorder(
+      errorBorder: UnderlineInputBorder(
           borderSide: BorderSide(
               width: 1,
               color:Colors.red

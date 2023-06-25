@@ -8,9 +8,7 @@ abstract class AppTextStyles{
       color:color,
       fontSize: fontSize,
       fontWeight: FontWeightManager.normal,
-      fontFamily: FontConstants.fontFamily,
-
-    );
+      fontFamily: FontConstants.fontFamily,);
   }
   static  TextStyle getBoldText({
     required double fontSize,

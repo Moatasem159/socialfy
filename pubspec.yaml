@@ -26,6 +26,7 @@ dependencies:
   equatable: ^2.0.5
   flutter_local_notifications: ^14.1.1
   flutter_native_splash: ^2.3.1
+  permission_handler: ^10.3.0
   intl: any
   photo_gallery: ^2.0.2
   scrollable_positioned_list: ^0.3.8
@@ -55,11 +56,7 @@ flutter:
   uses-material-design: true
 
   assets:
-     - assets/images/socialfy_logo.png
-     - assets/images/image_1.jpg
-     - assets/images/image_2.jpg
-
-
+     - assets/images/
   fonts:
     - family: AppLogo
       fonts:

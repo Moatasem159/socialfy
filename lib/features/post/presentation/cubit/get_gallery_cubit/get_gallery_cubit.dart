@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:photo_gallery/photo_gallery.dart';
 import 'package:socialfy/features/post/domain/usecases/get_album_images_usecase.dart';
 import 'package:socialfy/features/post/domain/usecases/get_gallery_albums_usecase.dart';
@@ -17,11 +18,31 @@ class GetGalleryCubit extends Cubit<GetGalleryStates> {
   Album? selectedModel;
   Medium? selectedImage;
   File? imageFile;
+  Future<bool> _promptPermissionSetting() async {
+    if (Platform.isIOS) {
+      if (await Permission.storage.request().isGranted) {
+        return true;
+      }
+    }
+    if (Platform.isAndroid) {
+      if (await Permission.storage.request().isGranted ||
+          await Permission.photos.request().isGranted &&
+              await Permission.videos.request().isGranted) {
+        return true;
+      }
+    }
+    return false;
+  }
   Future<void>getGallery()async{
     emit(GetImagesLoadingState());
-    await getGalleryAlbum();
-    await getAlbumImages(album: albums![0]);
-    emit(GetImagesSuccessState());
+    if(await _promptPermissionSetting()){
+      await getGalleryAlbum();
+      await getAlbumImages(album: albums![0]);
+      emit(GetImagesSuccessState());
+    }
+    else{
+      emit(GetImagesErrorState());
+    }
   }
   Future<void>getGalleryAlbum()async{
     albums = await _getGalleryAlbumsUseCase.call();
