@@ -18,7 +18,6 @@ import 'package:socialfy/features/messenger/domain/usecases/get_users_usecase.da
 import 'package:socialfy/features/messenger/domain/usecases/send_message_usecase.dart';
 import 'package:socialfy/features/messenger/presentation/cubits/chat_cubit/chat_cubit.dart';
 import 'package:socialfy/features/messenger/presentation/cubits/get_all_user_cubit/get_all_users_cubit.dart';
-import 'package:socialfy/features/messenger/presentation/cubits/send_message_cubit/send_message_cubit.dart';
 import 'package:socialfy/features/post/data/datasources/local/gallery_data_source.dart';
 import 'package:socialfy/features/post/data/datasources/remote/comment_remote_data_source.dart';
 import 'package:socialfy/features/post/data/repositories/comment_repository_impl.dart';
@@ -92,8 +91,7 @@ Future<void> init()async{
   sl.registerFactory<ProfileCubit>(() => ProfileCubit(getProfileUseCase:  sl(),sharedPrefrencesConsumer: sl()));
   sl.registerFactory<ThemeCubit>(() => ThemeCubit(sl(),sl()));
   sl.registerFactory<GetAllUsersCubit>(() => GetAllUsersCubit(sl(),sl()));
-  sl.registerFactory<ChatCubit>(() => ChatCubit(sl()));
-  sl.registerFactory<SendMessageCubit>(() => SendMessageCubit(sl(),sl()));
+  sl.registerFactory<ChatCubit>(() => ChatCubit(sl(),sl(),sl()));
 
   /// data Source
   sl.registerLazySingleton<PostRemoteDataSource>(() => PostRemoteDataSourceImpl(sl()));
