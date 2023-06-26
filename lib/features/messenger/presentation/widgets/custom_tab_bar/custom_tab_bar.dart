@@ -12,6 +12,7 @@ class CustomTabBar extends StatelessWidget {
       builder: (context, state) {
         TabBarCubit cubit=TabBarCubit.get(context);
         return SliverAppBar(
+          automaticallyImplyLeading: false,
           toolbarHeight: 65,
           expandedHeight: 65,
           floating: true,

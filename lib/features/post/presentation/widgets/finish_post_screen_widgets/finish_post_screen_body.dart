@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:socialfy/config/routes/routes_manager.dart';
 import 'package:socialfy/core/extensions/screen_size_extension.dart';
 import 'package:socialfy/core/utils/strings_manager.dart';
@@ -19,8 +20,7 @@ class FinishPostScreenBody extends StatelessWidget {
       listener: (context, state) {
        if(state is CreatePostSuccessState)
          {
-           Navigator.pushNamedAndRemoveUntil(
-               context, Routes.mainScreenRoute, (route) => false);
+           GoRouter.of(context).pushReplacementNamed(Routes.mainScreenRoute);
          }
       },
       builder: (context, state) {

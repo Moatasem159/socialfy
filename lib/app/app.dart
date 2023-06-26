@@ -31,8 +31,8 @@ class Socialfy extends StatelessWidget {
              return current is !ChangeState;
             },
             builder: (context, state) {
-              return MaterialApp(
-                onGenerateRoute: RouteGenerator.getRoute,
+              return MaterialApp.router(
+                routerConfig: AppRoutes.router,
                 debugShowCheckedModeBanner: false,
                 themeMode: themeState.mood,
                 theme: AppTheme.lightTheme,

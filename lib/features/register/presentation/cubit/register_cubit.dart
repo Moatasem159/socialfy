@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:socialfy/config/routes/routes_manager.dart';
 import 'package:socialfy/core/error/failures.dart';
 import 'package:socialfy/core/utils/strings_manager.dart';
@@ -74,7 +75,7 @@ class RegisterCubit extends Cubit<RegisterStates> {
   void listen(context,state){
     if (state is UserRegisterSuccessState) {
       CustomToast.showToast(context, msg: AppStrings.registerSuccessfullyMsg);
-      Navigator.pushNamed(context, Routes.loginScreenRoute);
+      GoRouter.of(context).pushNamed(Routes.loginScreenRoute);
     }
     if (state is UserRegisterErrorState) {
       if(state.msg=="com.google.firebase.FirebaseException: An internal error has occurred. [ connection closed ]") {

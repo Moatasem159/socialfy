@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:socialfy/config/routes/routes_manager.dart';
 import 'package:socialfy/core/utils/app_text_styles.dart';
 import 'package:socialfy/core/utils/font_manager.dart';
@@ -14,7 +15,7 @@ class LogoutButton extends StatelessWidget {
     return BlocListener<ProfileCubit, ProfileStates>(
       listener: (context, state) {
         if(state is LogoutDoneState) {
-          Navigator.pushNamedAndRemoveUntil(context, Routes.welcomeScreenRoute, (route) => false);
+          GoRouter.of(context).pushReplacementNamed(Routes.welcomeScreenRoute);
         }
       },
       child: MainButton(

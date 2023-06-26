@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:socialfy/config/routes/routes_manager.dart';
 import 'package:socialfy/core/extensions/empty_padding_extension.dart';
 import 'package:socialfy/core/utils/app_text_styles.dart';
@@ -18,10 +19,7 @@ class SignUpWidget extends StatelessWidget {
         ),
         5.pw,
         GestureDetector(
-          onTap: () {
-            Navigator.of(context)
-                .pushNamed(Routes.registerScreenRoute);
-          },
+          onTap: () => GoRouter.of(context).pushNamed(Routes.registerScreenRoute),
           child: Text(
             AppStrings.signUp,
             style: AppTextStyles.getNormalText(

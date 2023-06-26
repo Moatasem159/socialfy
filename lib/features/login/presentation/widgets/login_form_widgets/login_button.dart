@@ -20,7 +20,7 @@ class LoginButton extends StatelessWidget {
             15.ph,
             if (state is !LoginLoadingState)
               MainButton(
-                  onPressed:()=> cubit.login(context),
+                  onPressed:cubit.login,
                   width: context.getWidth(w: 1.2),
                   height: context.getHeight(h:18),
                   color: Theme.of(context).primaryColor,

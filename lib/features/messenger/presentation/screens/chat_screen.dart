@@ -12,22 +12,21 @@ class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key, required this.user, required this.newChat});
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-        providers: [
-          BlocProvider(create: (context) => sl<ChatCubit>()
-            ..newChat=newChat..receiverId=user.uId!
+    return BlocProvider(
+      create: (context) => sl<ChatCubit>()
+        ..newChat = newChat
+        ..receiverId = user.uId!,
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: SafeArea(
+          child: Scaffold(
+            backgroundColor: Theme.of(context).colorScheme.background,
+            appBar: ChatScreenAppBar(user: user),
+            body: const MessagesList(),
+            bottomSheet: const ChatTextField(),
           ),
-        ],
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: SafeArea(
-            child: Scaffold(
-              backgroundColor: Theme.of(context).colorScheme.background,
-              appBar: ChatScreenAppBar(user: user),
-              body: const MessagesList(),
-              bottomSheet: const ChatTextField(),
-            ),
-          ),
-        ));
+        ),
+      ),
+    );
   }
 }

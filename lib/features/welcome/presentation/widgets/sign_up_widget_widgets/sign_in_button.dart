@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:socialfy/config/routes/routes_manager.dart';
 import 'package:socialfy/core/extensions/empty_padding_extension.dart';
 import 'package:socialfy/core/utils/app_text_styles.dart';
@@ -17,7 +18,7 @@ class SignInButton extends StatelessWidget {
         ),
         5.pw,
         GestureDetector(
-          onTap: () => Navigator.of(context).pushNamed(Routes.loginScreenRoute),
+          onTap: () => GoRouter.of(context).pushNamed(Routes.loginScreenRoute),
           child: Text(AppStrings.signIn,
             style: AppTextStyles.getNormalText(fontSize: FontSize.s16, color: Theme.of(context).primaryColor).copyWith(
                 decoration: TextDecoration.underline

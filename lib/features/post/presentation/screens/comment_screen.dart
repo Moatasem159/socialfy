@@ -8,9 +8,9 @@ import 'package:socialfy/features/post/presentation/cubit/create_comment_cubit/c
 import 'package:socialfy/features/post/presentation/cubit/get_comments_cubit/get_comments_cubit.dart';
 import 'package:socialfy/features/post/presentation/widgets/comments_screen_widgets/comment_text_field.dart';
 import 'package:socialfy/features/post/presentation/widgets/comments_screen_widgets/comments_screen_body.dart';
-class CreateCommentScreen extends StatelessWidget {
+class CommentsScreen extends StatelessWidget {
   final Post post;
-  const CreateCommentScreen({Key? key, required this.post}) : super(key: key);
+  const CommentsScreen({Key? key, required this.post}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(

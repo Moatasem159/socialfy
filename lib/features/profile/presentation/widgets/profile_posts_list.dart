@@ -18,7 +18,7 @@ class ProfilePostsList extends StatelessWidget {
             delegate: SliverChildBuilderDelegate(
                 childCount: UserPostsCubit.get(context).userPosts.length,
                 (context, index) => UserPostCard(
-                    posts: UserPostsCubit.get(context).userPosts,
+                    posts: UserPostsCubit.get(context).userPosts[index],
                     index: index)));
       },
     );

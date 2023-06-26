@@ -159,26 +159,20 @@ Future<void> init()async{
   ));
   sl.registerLazySingleton<SharedPrefrencesConsumer>(() => SharedPrefrencesManager(sl()));
   // sl.registerLazySingleton<NotificationsHandler>(() => Notifications(flutterLocalNotificationsPlugin: sl()));
-
+  initRegisterModule();
+  initLoginModule();
 }
 
 initRegisterModule() {
-  if (!GetIt.I.isRegistered<RegisterUseCase>()) {
     sl.registerFactory(() => RegisterCubit(sl()));
     sl.registerLazySingleton<RegisterUseCase>(() => RegisterUseCase(sl()));
     sl.registerLazySingleton<RegisterRepository>(() => RegisterRepositoryImpl(sl(),sl()));
     sl.registerLazySingleton<RegisterRemoteDataSource>(() => RegisterRemoteDataSourceImpl(sl()));
-
-  }
-
 }
-
 initLoginModule() {
-  if (!GetIt.I.isRegistered<LoginUseCase>()) {
     sl.registerFactory(() => LoginCubit(sl()));
     sl.registerLazySingleton<LoginUseCase>(() => LoginUseCase(loginRepository: sl()));
     sl.registerLazySingleton<LoginRepository>(() => LoginRepositoryImpl(sl(),sl(),sl()));
     sl.registerLazySingleton<LoginRemoteDataSource>(() =>LoginRemoteDataSourceImpl(sl()));
     sl.registerLazySingleton<LoginLocalDataSource>(() =>LoginLocalDataSourceImpl(sl()));
-  }
 }

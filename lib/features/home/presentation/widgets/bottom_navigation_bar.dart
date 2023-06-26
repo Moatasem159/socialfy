@@ -3,11 +3,7 @@ class MainBottomNavigationBar extends StatelessWidget {
   final List<BottomNavigationBarItem> items;
   final int index;
   final ValueChanged<int>? onTap;
-  const MainBottomNavigationBar({Key? key,
-    required this.items,
-    required this.index,
-    this.onTap}) : super(key: key);
-
+  const MainBottomNavigationBar({Key? key, required this.items, required this.index, this.onTap}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Theme(
@@ -15,12 +11,6 @@ class MainBottomNavigationBar extends StatelessWidget {
         splashFactory: NoSplash.splashFactory,
         highlightColor:  Colors.transparent,
       ),
-      child: BottomNavigationBar(
-      items: items,
-      currentIndex:index,
-      onTap:onTap,
-
-        ),
-    );
+      child: BottomNavigationBar(items: items, currentIndex:index,onTap:onTap));
   }
 }

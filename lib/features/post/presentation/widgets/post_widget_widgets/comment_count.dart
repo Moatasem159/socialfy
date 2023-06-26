@@ -13,7 +13,7 @@ class CommentsCount extends StatelessWidget {
       return GestureDetector(
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => CreateCommentScreen(post: post),
+            builder: (context) => CommentsScreen(post: post),
           ));
         },
         child: Padding(

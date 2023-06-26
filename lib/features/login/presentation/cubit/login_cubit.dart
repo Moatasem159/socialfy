@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:socialfy/config/routes/routes_manager.dart';
 import 'package:socialfy/core/error/failures.dart';
 import 'package:socialfy/core/utils/strings_manager.dart';
@@ -35,7 +36,7 @@ class LoginCubit extends Cubit<LoginStates> {
     passSuffix = passIsHidden ? Icons.visibility_outlined : Icons.visibility_off_outlined;
     emit(ChangePasswordVisibilityDone());
   }
-  Future<void> login(context) async {
+  Future<void> login() async {
     if (formKey.currentState!.validate()) {
       emit(LoginLoadingState());
       Either<Failure, UserDataModel> response = await _loginUseCase.call(
@@ -51,8 +52,7 @@ class LoginCubit extends Cubit<LoginStates> {
         msg: AppStrings.loginSuccessfullyMsg,
       );
       GetAllUsersCubit.get(context).getAllUsers();
-      Navigator.pushNamedAndRemoveUntil(
-          context, Routes.mainScreenRoute, (route) => false);
+      GoRouter.of(context).pushReplacementNamed(Routes.mainScreenRoute);
     }
     if (state is LoginErrorState) {
       CustomToast.showToast(context, msg: state.msg);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:socialfy/config/routes/routes_manager.dart';
 import 'package:socialfy/core/extensions/empty_padding_extension.dart';
 import 'package:socialfy/core/extensions/screen_size_extension.dart';
@@ -14,7 +15,7 @@ class SignUpButtons extends StatelessWidget {
     return Column(
       children: [
         MainButton(
-            onPressed: () => Navigator.pushNamed(context, Routes.registerScreenRoute),
+            onPressed: () => GoRouter.of(context).pushNamed(Routes.registerScreenRoute),
             width: context.getWidth(w: 1.39),
             color: Theme.of(context).primaryColor,
             height: context.getHeight(h: 15),

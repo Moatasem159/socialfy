@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-
+import 'package:go_router/go_router.dart';
 class MainBackButton extends StatelessWidget {
   final  VoidCallback? onPressed;
   const MainBackButton({Key? key,this.onPressed}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(onPressed: ()=>Navigator.of(context).pop(),
+    return ElevatedButton(onPressed: ()=>GoRouter.of(context).pop(),
       style: ButtonStyle(
         minimumSize: MaterialStateProperty.all(const Size(34,34)),
         padding: MaterialStateProperty.all(EdgeInsets.zero),

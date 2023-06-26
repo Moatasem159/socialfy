@@ -21,11 +21,11 @@ class ChatCubit extends Cubit<ChatStates> {
   static ChatCubit get(context)=>BlocProvider.of(context);
   List<Message> messages=[];
   final TextEditingController controller=TextEditingController();
-  late final Chat chat=Chat(receiverId: receiverId, chatId: getChatId());
+  late final Chat chat=Chat(receiverId: receiverId, chatId: _getChatId());
   late final String receiverId;
   late final bool newChat;
   Stream<QuerySnapshot<Object>>getChatMessages() {
-    return _getChatMessagesUseCase.call(chatId: getChatId());
+    return _getChatMessagesUseCase.call(chatId: _getChatId());
   }
   void fillList(List<QueryDocumentSnapshot<Object?>> snapshot){
     for (var i = 0; i < snapshot.length; i++) {
@@ -85,7 +85,7 @@ class ChatCubit extends Cubit<ChatStates> {
     }
   }
 
-  String getChatId(){
+  String _getChatId(){
     if(receiverId.length>AppStrings.userLoggedInId!.length)
       {
         return "${AppStrings.userLoggedInId.hashCode+receiverId.hashCode}";

@@ -1,22 +1,20 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:socialfy/config/routes/routes_manager.dart';
 import 'package:socialfy/core/entities/user.dart';
 import 'package:socialfy/core/extensions/empty_padding_extension.dart';
 import 'package:socialfy/core/utils/app_text_styles.dart';
 import 'package:socialfy/core/utils/assets_manager.dart';
 import 'package:socialfy/core/utils/font_manager.dart';
-import 'package:socialfy/features/messenger/presentation/screens/chat_screen.dart';
 class MessengerUserTile extends StatelessWidget {
   final User user;
   final bool newChat;
   const MessengerUserTile({super.key,required this.user, required this.newChat});
-
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(builder:(context) => ChatScreen(user: user,newChat:newChat,)));
-      },
+      onTap: () => GoRouter.of(context).pushNamed(Routes.chatScreenRoute,extra:user,queryParameters:{"newChat":newChat.toString()}),
       splashColor: Colors.transparent,
       child: Padding(
         padding:
