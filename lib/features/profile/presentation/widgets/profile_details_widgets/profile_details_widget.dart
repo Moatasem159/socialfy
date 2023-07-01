@@ -3,8 +3,8 @@ import 'package:socialfy/core/entities/user.dart';
 import 'package:socialfy/core/extensions/empty_padding_extension.dart';
 import 'package:socialfy/core/utils/app_text_styles.dart';
 import 'package:socialfy/core/utils/font_manager.dart';
+import 'package:socialfy/core/widgets/profile_picture_widget.dart';
 import 'package:socialfy/features/profile/presentation/cubit/user_posts_cubit/user_posts_cubit.dart';
-import 'package:socialfy/features/profile/presentation/widgets/profile_details_widgets/profile_image_widget.dart';
 import 'package:socialfy/features/profile/presentation/widgets/profile_details_widgets/profile_info.dart';
 class ProfileDetailsWidget extends StatelessWidget {
   final User user;
@@ -19,7 +19,7 @@ class ProfileDetailsWidget extends StatelessWidget {
           children: [
             Row(
               children: [
-                ProfileImageWidget(image: user.profilePic!),
+                ProfilePicWidget(image: user.profilePic!,height: 75,width: 75),
                 ProfileInfo(title:'posts',count: UserPostsCubit.get(context).userPosts.length),
                 const ProfileInfo(title:'followers',count: 0),
                 const ProfileInfo(title:'following',count: 0),

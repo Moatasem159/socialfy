@@ -32,7 +32,7 @@ void main() async{
   // final RemoteMessage? remoteMessage= await messaging.getInitialMessage();
   SharedPrefrencesConsumer sharedPrefrencesConsumer=di.sl<SharedPrefrencesConsumer>();
   AppStrings.userLoggedInId=await sharedPrefrencesConsumer.getData(key: AppStrings.userLoggedIn);
-  AppStrings.profilePic=await sharedPrefrencesConsumer.getData(key: AppStrings.userProfilePic);
+  AppStrings.profilePic=await sharedPrefrencesConsumer.getData(key: AppStrings.userProfilePic)??'';
   AppStrings.userName=await sharedPrefrencesConsumer.getData(key: AppStrings.userProfileUsername);
   Bloc.observer=AppBlocObserver();
   runApp(const Socialfy());

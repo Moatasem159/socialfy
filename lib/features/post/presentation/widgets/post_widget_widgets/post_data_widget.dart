@@ -1,10 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:socialfy/core/extensions/empty_padding_extension.dart';
 import 'package:socialfy/core/utils/app_text_styles.dart';
-import 'package:socialfy/core/utils/assets_manager.dart';
 import 'package:socialfy/core/utils/font_manager.dart';
 import 'package:socialfy/core/utils/values_manager.dart';
+import 'package:socialfy/core/widgets/profile_picture_widget.dart';
 import 'package:socialfy/features/post/domain/entities/post.dart';
 class PostDataWidget extends StatelessWidget {
   final Post post;
@@ -12,28 +11,11 @@ class PostDataWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Row(
         children: [
-          CachedNetworkImage(
-            imageUrl:post.profilePic!,
-            height: 35,
-            width: 35,
-            imageBuilder: (context, imageProvider) {
-              return Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(image: imageProvider),
-                  )
-              );
-            },
-            errorWidget: (context, url, error) => Container(
-              decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(image: AssetImage(ImageAssets.noProfileImagePath))),
-            ),
-          ),
-          8.pw,
+          ProfilePicWidget(image: post.profilePic!),
+          5.pw,
           Text(
             post.username!,
             style: AppTextStyles.getNormalText(fontSize: FontSize.s14, color: Theme.of(context).primaryColor)
