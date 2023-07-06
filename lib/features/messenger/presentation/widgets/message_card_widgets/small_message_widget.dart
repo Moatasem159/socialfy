@@ -24,7 +24,7 @@ class SmallMessageWidget extends StatelessWidget {
         constraints:  BoxConstraints(
           minWidth: 70,
           minHeight: 25,
-          maxWidth: context.getWidth(w: 1.2)),
+          maxWidth: context.getWidth(w: 1.22)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.end,

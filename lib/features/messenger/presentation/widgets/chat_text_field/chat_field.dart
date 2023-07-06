@@ -9,6 +9,8 @@ class ChatField extends StatelessWidget {
     return Expanded(
       child: TextFormField(
         controller: controller,
+
+        cursorColor: Theme.of(context).primaryColorLight,
         style: AppTextStyles.getNormalText(fontSize: FontSize.s14, color: Theme
             .of(context)
             .colorScheme

@@ -12,7 +12,7 @@ class ChatTextField extends StatelessWidget {
     return BlocListener<ChatCubit, ChatStates>(
   listener: ChatCubit.get(context).listen,
   child: Container(
-      padding: const EdgeInsets.only(right: 8,left: 8,bottom: 4),
+      padding: const EdgeInsets.only(right: 8,left: 8,bottom:4),
       color: Theme.of(context).colorScheme.background,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,

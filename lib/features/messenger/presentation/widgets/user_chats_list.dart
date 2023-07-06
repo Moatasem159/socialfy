@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:socialfy/core/widgets/loading_widget.dart';
-import 'package:socialfy/features/messenger/presentation/cubits/get_all_user_cubit/get_all_users_cubit.dart';
-import 'package:socialfy/features/messenger/presentation/cubits/get_all_user_cubit/get_all_users_state.dart';
+import 'package:socialfy/features/messenger/presentation/cubits/get_chats_cubit/get_chats_cubit.dart';
+import 'package:socialfy/features/messenger/presentation/cubits/get_chats_cubit/get_chats_state.dart';
 import 'package:socialfy/features/messenger/presentation/widgets/messenger_user_tile.dart';
 class UserChatsList extends StatelessWidget {
   const UserChatsList({super.key});
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GetAllUsersCubit, GetAllUsersStates>(
+    return BlocBuilder<GetChatsCubit, GetChatsStates>(
       builder: (context, state) {
-        GetAllUsersCubit cubit = GetAllUsersCubit.get(context);
-        if(state is GetAllUsersLoadingState)
+        GetChatsCubit cubit = GetChatsCubit.get(context);
+        if(state is GetChatsLoadingState)
           {
             return const SliverToBoxAdapter(child: Center(child:LoadingWidget(size: 40)));
           }

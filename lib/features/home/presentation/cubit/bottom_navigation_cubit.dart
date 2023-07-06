@@ -6,6 +6,7 @@ import 'package:socialfy/config/routes/routes_manager.dart';
 import 'package:socialfy/core/utils/strings_manager.dart';
 import 'package:socialfy/core/widgets/profile_picture_widget.dart';
 import 'package:socialfy/features/home/presentation/cubit/bottom_navigation_state.dart';
+import 'package:socialfy/features/messenger/presentation/cubits/get_chats_cubit/get_chats_cubit.dart';
 import 'package:socialfy/features/messenger/presentation/screens/messenger_screen.dart';
 import 'package:socialfy/features/notifications/presentation/screens/notifications_screen.dart';
 import 'package:socialfy/features/post/presentation/screens/create_post_screen.dart';
@@ -34,7 +35,13 @@ class BottomNavigationCubit extends Cubit<BottomNavigationStates> {
   void changeIndex(int index, BuildContext context) {
     if (index == 2) {
      GoRouter.of(context).pushNamed(Routes.createPostScreenRoute);
-    } else {
+    }
+    else if(index==3){
+      if(!GetChatsCubit.get(context).isSuccess()) {
+        GetChatsCubit.get(context).getUserChats();
+      }
+      bottomNavIndex = index;
+    }else {
       bottomNavIndex = index;
     }
     emit(ChangeBottomNavDoneState());

@@ -5,7 +5,6 @@ import 'package:socialfy/core/utils/strings_manager.dart';
 import 'package:socialfy/features/messenger/data/models/message_model.dart';
 
 abstract class ChatRemoteDataSource {
-  Future<List<QueryDocumentSnapshot<Object?>>> getUsers();
   Future<dynamic> createChat({required String chatId,required MessageModel message,required String receiverId});
   Future<dynamic> sendMessage({required String chatId,required MessageModel message});
   Stream<QuerySnapshot<Object>> getChatMessages({required String chatId});
@@ -14,18 +13,6 @@ abstract class ChatRemoteDataSource {
 class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
   final FireBaseConsumer _fireBaseConsumer;
   ChatRemoteDataSourceImpl(this._fireBaseConsumer);
-  @override
-  Future<List<QueryDocumentSnapshot<Object?>>> getUsers() async {
-   if(AppStrings.userLoggedInId!=null){
-     List<QueryDocumentSnapshot<Object?>> users = [];
-     QuerySnapshot response = await _fireBaseConsumer.getCollections(
-         collectionName: EndPoints.userCollection);
-     users.addAll(response.docs);
-     return users;
-   }
-   return [];
-  }
-
   @override
   Future<dynamic> createChat({required String chatId,required MessageModel message,required String receiverId}) async {
     await _fireBaseConsumer.addDeep1(

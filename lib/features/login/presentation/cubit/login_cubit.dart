@@ -9,7 +9,7 @@ import 'package:socialfy/core/widgets/toast/custom_toast.dart';
 import 'package:socialfy/features/login/domain/usecases/login_use_case.dart';
 import 'package:socialfy/features/login/presentation/cubit/login_state.dart';
 import 'package:socialfy/core/models/user_model.dart';
-import 'package:socialfy/features/messenger/presentation/cubits/get_all_user_cubit/get_all_users_cubit.dart';
+import 'package:socialfy/features/users/presentation/cubits/get_all_users_cubit.dart';
 class LoginCubit extends Cubit<LoginStates> {
   LoginCubit(this._loginUseCase) : super(LoginInitialState());
   final LoginUseCase _loginUseCase;

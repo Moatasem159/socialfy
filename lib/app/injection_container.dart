@@ -14,10 +14,9 @@ import 'package:socialfy/features/messenger/domain/repositories/chat_repository.
 import 'package:socialfy/features/messenger/domain/usecases/create_chat_usecase.dart';
 import 'package:socialfy/features/messenger/domain/usecases/get_chat_messages_usecase.dart';
 import 'package:socialfy/features/messenger/domain/usecases/get_user_chats_usecase.dart';
-import 'package:socialfy/features/messenger/domain/usecases/get_users_usecase.dart';
 import 'package:socialfy/features/messenger/domain/usecases/send_message_usecase.dart';
 import 'package:socialfy/features/messenger/presentation/cubits/chat_cubit/chat_cubit.dart';
-import 'package:socialfy/features/messenger/presentation/cubits/get_all_user_cubit/get_all_users_cubit.dart';
+import 'package:socialfy/features/messenger/presentation/cubits/get_chats_cubit/get_chats_cubit.dart';
 import 'package:socialfy/features/post/data/datasources/local/gallery_data_source.dart';
 import 'package:socialfy/features/post/data/datasources/remote/comment_remote_data_source.dart';
 import 'package:socialfy/features/post/data/repositories/comment_repository_impl.dart';
@@ -71,14 +70,14 @@ import 'package:socialfy/features/register/data/repositories/register_repository
 import 'package:socialfy/features/register/domain/repositories/register_repository.dart';
 import 'package:socialfy/features/register/domain/usecases/register_use_case.dart';
 import 'package:socialfy/features/register/presentation/cubit/register_cubit.dart';
-
+import 'package:socialfy/features/users/data/datasources/users_data_source.dart';
+import 'package:socialfy/features/users/data/repositories/users_repository_impl.dart';
+import 'package:socialfy/features/users/domain/repositories/users_repository.dart';
+import 'package:socialfy/features/users/domain/usecases/get_all_users_usecase.dart';
+import 'package:socialfy/features/users/presentation/cubits/get_all_users_cubit.dart';
 final sl = GetIt.instance;
-
 Future<void> init()async{
-
-
   ///bloc
-
   sl.registerFactory<DeletePostCubit>(() => DeletePostCubit(sl()));
   sl.registerFactory<DeleteCommentCubit>(() => DeleteCommentCubit(sl()));
   sl.registerFactory<CreatePostCubit>(() => CreatePostCubit(sl()));
@@ -90,8 +89,9 @@ Future<void> init()async{
   sl.registerFactory<GetPostsCubit>(() => GetPostsCubit(sl()));
   sl.registerFactory<ProfileCubit>(() => ProfileCubit(getProfileUseCase:  sl(),sharedPrefrencesConsumer: sl()));
   sl.registerFactory<ThemeCubit>(() => ThemeCubit(sl(),sl()));
-  sl.registerFactory<GetAllUsersCubit>(() => GetAllUsersCubit(sl(),sl()));
+  sl.registerFactory<GetChatsCubit>(() => GetChatsCubit(sl()));
   sl.registerFactory<ChatCubit>(() => ChatCubit(sl(),sl(),sl()));
+  sl.registerFactory<GetAllUsersCubit>(() => GetAllUsersCubit(sl()));
 
   /// data Source
   sl.registerLazySingleton<PostRemoteDataSource>(() => PostRemoteDataSourceImpl(sl()));
@@ -100,6 +100,7 @@ Future<void> init()async{
   sl.registerLazySingleton<ProfileRemoteDataSource>(() => ProfileRemoteDataSourceImpl(sl()));
   sl.registerLazySingleton<ThemeLocalDataSource>(() => ThemeLocalDataSourceImpl(sl()));
   sl.registerLazySingleton<ChatRemoteDataSource>(() => ChatRemoteDataSourceImpl(sl()));
+  sl.registerLazySingleton<UsersRemoteDataSource>(() => UsersRemoteDataSourceImpl(sl()));
   /// Repositories
   sl.registerLazySingleton<PostRepository>(() => PostRepositoryImpl(sl(),sl()));
   sl.registerLazySingleton<GalleryRepository>(() => GalleryRepositoryImpl(sl()));
@@ -107,6 +108,7 @@ Future<void> init()async{
   sl.registerLazySingleton<ProfileRepository>(() => ProfileRepositoryImpl( sl(),sl()));
   sl.registerLazySingleton<ThemeRepository>(() => ThemeRepositoryImpl(sl()));
   sl.registerLazySingleton<ChatRepository>(() => ChatRepositoryImpl(sl(),sl()));
+  sl.registerLazySingleton<UsersRepository>(() => UsersRepositoryImpl(sl(),sl()));
   ///use case
 
   sl.registerLazySingleton<GetGalleryAlbumsUseCase>(() => GetGalleryAlbumsUseCase(sl()));

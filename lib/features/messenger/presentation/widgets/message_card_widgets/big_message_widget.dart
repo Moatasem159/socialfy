@@ -23,7 +23,7 @@ class BigMessageWidget extends StatelessWidget {
             topRight: isSender?Radius.zero:const Radius.circular(10))),
         constraints:  BoxConstraints(
           minWidth: 70,
-          maxWidth: context.getWidth(w: 1.2),
+          maxWidth: context.getWidth(w: 1.22),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,

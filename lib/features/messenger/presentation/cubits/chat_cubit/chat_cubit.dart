@@ -3,7 +3,6 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:socialfy/core/error/failures.dart';
-import 'package:socialfy/core/utils/app_global.dart';
 import 'package:socialfy/core/utils/strings_manager.dart';
 import 'package:socialfy/features/messenger/data/models/message_model.dart';
 import 'package:socialfy/features/messenger/domain/entities/chat.dart';
@@ -12,7 +11,8 @@ import 'package:socialfy/features/messenger/domain/usecases/create_chat_usecase.
 import 'package:socialfy/features/messenger/domain/usecases/get_chat_messages_usecase.dart';
 import 'package:socialfy/features/messenger/domain/usecases/send_message_usecase.dart';
 import 'package:socialfy/features/messenger/presentation/cubits/chat_cubit/chat_state.dart';
-import 'package:socialfy/features/messenger/presentation/cubits/get_all_user_cubit/get_all_users_cubit.dart';
+import 'package:socialfy/features/messenger/presentation/cubits/get_chats_cubit/get_chats_cubit.dart';
+import 'package:socialfy/features/users/presentation/cubits/get_all_users_cubit.dart';
 class ChatCubit extends Cubit<ChatStates> {
   ChatCubit(this._getChatMessagesUseCase, this._createChatUseCase, this._sendMessageUseCase):super(ChatInitialState());
   final GetChatMessagesUseCase _getChatMessagesUseCase;
@@ -21,6 +21,7 @@ class ChatCubit extends Cubit<ChatStates> {
   static ChatCubit get(context)=>BlocProvider.of(context);
   List<Message> messages=[];
   final TextEditingController controller=TextEditingController();
+
   late final Chat chat=Chat(receiverId: receiverId, chatId: _getChatId());
   late final String receiverId;
   late final bool newChat;
@@ -77,10 +78,10 @@ class ChatCubit extends Cubit<ChatStates> {
     {
       if(newChat)
       {
-        chat.user = AppGlobal.users.firstWhere((element) => element.uId == chat.receiverId);
-        GetAllUsersCubit.get(context).userChats.add(chat);
-        GetAllUsersCubit.get(context).allUser.remove(chat.user!);
-        GetAllUsersCubit.get(context).change();
+        chat.user = GetAllUsersCubit.allUsers.firstWhere((element) => element.uId == chat.receiverId);
+        GetChatsCubit.get(context).userChats.add(chat);
+        GetChatsCubit.get(context).allChats.remove(chat.user!);
+        GetChatsCubit.get(context).change();
       }
     }
   }
