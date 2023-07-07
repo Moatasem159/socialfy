@@ -44,7 +44,7 @@ class MessageDateWidget extends StatelessWidget {
       child: Text(
         _dateString(date),
         style: AppTextStyles.getNormalText(
-            fontSize: AppSize.s12, color: Theme.of(context).primaryColor),
+            fontSize: AppSize.s12, color: Colors.white),
       ),
     );
   }

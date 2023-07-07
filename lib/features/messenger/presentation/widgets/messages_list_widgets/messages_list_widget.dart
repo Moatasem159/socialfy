@@ -15,7 +15,7 @@ class MessagesListWidget extends StatelessWidget {
         ChatCubit.get(context).fillList(snapshot.hasData?snapshot.data!.docs:[]);
         return ListView.builder(
           physics: const ClampingScrollPhysics(),
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 40,top: 5),
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 42,top: 5),
           controller: scrollController,
           itemCount: ChatCubit.get(context).messages.length,
           itemBuilder: (context, index) {
@@ -32,9 +32,7 @@ class MessagesListWidget extends StatelessWidget {
                   MessageDateWidget(date: ChatCubit.get(context).messages[index].createdAt),
                   MessageCard(
                   isSender: ChatCubit.get(context).messages[index].senderId == AppStrings.userLoggedInId,
-                  message: ChatCubit.get(context).messages[index].message,
-                  time: ChatCubit.get(context).messages[index].createdAt,
-                ),
+                  message: ChatCubit.get(context).messages[index]),
               ],
             );
           },

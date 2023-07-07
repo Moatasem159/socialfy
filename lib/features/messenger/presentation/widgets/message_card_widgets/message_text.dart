@@ -6,13 +6,15 @@ class MessageText extends StatelessWidget {
   final String message;
   @override
   Widget build(BuildContext context) {
-    return Text(message,
-        maxLines: null,style: AppTextStyles.getNormalText(
-            fontSize: FontSize.s14, color: Colors.white).copyWith(
-          height: 1.3,
-          wordSpacing: 1.2,
-          letterSpacing: 0.2,
-
-        ));
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 5),
+      child: Text(message,
+          maxLines: null,
+          style: AppTextStyles.getNormalText(
+              fontSize: FontSize.s14, color: Colors.white).copyWith(
+            height: 1.1,
+            wordSpacing: 1.2,
+            letterSpacing: 0.2)),
+    );
   }
 }
