@@ -5,19 +5,31 @@ import 'package:socialfy/core/utils/values_manager.dart';
 class MessageDateWidget extends StatelessWidget {
   final String date;
   const MessageDateWidget({super.key, required this.date});
-  String dateString(String date){
+  String _dateString(String date) {
     DateTime dateTime = DateTime.parse(date);
     String result;
-    if(DateTime.now().difference(dateTime).inDays==0){
+    DateTime now = DateTime.now();
+    DateTime today = DateTime(now.year, now.month, now.day);
+    DateTime yesterday = today.subtract(const Duration(days: 1));
+    DateTime yesterday1 = today.subtract(const Duration(days: 2));
+    DateTime yesterday2 = today.subtract(const Duration(days: 3));
+    DateTime yesterday3 = today.subtract(const Duration(days: 4));
+    DateTime yesterday4 = today.subtract(const Duration(days: 5));
+    DateTime yesterday5 = today.subtract(const Duration(days: 6));
+    if (dateTime.day == today.day) {
       result = 'Today';
     }
-    else if(DateTime.now().difference(dateTime).inDays==1)
-    {
+    else if (dateTime.day == yesterday.day) {
       result = 'Yesterday';
     }
-    else if (DateTime.now().difference(dateTime).inDays<5){
+    else if (dateTime.day == yesterday1.day ||
+        dateTime.day == yesterday2.day ||
+        dateTime.day == yesterday3.day ||
+        dateTime.day == yesterday4.day ||
+        dateTime.day == yesterday5.day) {
       result = DateFormat('EEEE').format(dateTime);
-    } else{
+    }
+    else {
       result = DateFormat('dd MMM yyyy').format(dateTime);
     }
     return result;
@@ -28,12 +40,11 @@ class MessageDateWidget extends StatelessWidget {
       padding: const EdgeInsets.all(AppPadding.p4),
       margin: const EdgeInsets.all(AppMargin.m8),
       decoration: BoxDecoration(
-          color: Colors.grey[800],
-          borderRadius: BorderRadius.circular(5)
-      ),
+          color: Colors.grey[800], borderRadius: BorderRadius.circular(5)),
       child: Text(
-        dateString(date),
-        style: AppTextStyles.getNormalText(fontSize: AppSize.s12, color: Theme.of(context).primaryColor),
+        _dateString(date),
+        style: AppTextStyles.getNormalText(
+            fontSize: AppSize.s12, color: Theme.of(context).primaryColor),
       ),
     );
   }
